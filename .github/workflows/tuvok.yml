@@ -1,0 +1,44 @@
+name: Tuvok
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+concurrency:
+  group: tuvok-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tuvok-security-scan:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - name: 📡 Initiate Transporter Lock (Checkout)
+        uses: actions/checkout@v4
+
+      - name: 🧪 Load PNPM Protocols (pnpm 10.15.0)
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+
+      - name: 🖥️ Calibrate Starfleet Console (Node 22.18.x + pnpm cache)
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22.18.x'
+          cache: 'pnpm'
+
+      - name: 📦 Replicate Dependencies (Install)
+        run: pnpm install --frozen-lockfile
+
+      - name: 🔍 Run Diagnostic Scan (Lint Dev)
+        run: pnpm run lint:dev
+
+      - name: 🧭 Prime Directive Compliance (Lint CI)
+        run: pnpm run lint:ci
+
+      - name: 🛡️ Holodeck Simulation (Unit Tests CI)
+        run: pnpm run test:unit:ci

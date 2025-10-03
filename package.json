@@ -1,0 +1,102 @@
+{
+  "name": "@RMajewski/dqat-core",
+  "version": "1.0.0",
+  "license": "EUPL-1.2",
+  "type": "module",
+  "author": {
+    "name": "René Majewski",
+    "email": "rene.majewski@gmx.de",
+    "url": "https://www.rene-majewski.de"
+  },
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": "^22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RMajewski/dqat-core.git"
+  },
+  "homepage": "https://github.com/RMajewski/dqat-core#readme",
+  "bugs": {
+    "url": "https://github.com/RMajewski/dqat-core/issues"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "dev": "tsup --watch --dts false",
+    "format": "prettier \"**/*.{css,html,json,md,ts,tsx,vue,yml,yaml}\" --write",
+    "lint:dev": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:ci": "ESLINT_TYPEAWARE=1 eslint .",
+    "pre-commit": "lint-staged",
+    "prepare": "husky",
+    "release": "semantic-release",
+    "test:unit": "vitest run --config vitest.unit.config.ts --reporter=verbose",
+    "test:unit:cov": "vitest run --config vitest.unit.config.ts --coverage",
+    "test:unit:ci": "vitest run --config vitest.unit.config.ts --reporter=verbose",
+    "test:unit:watch": "vitest ./test/unit",
+    "typecheck:test": "tsc -p tsconfig.test.json --noEmit"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "@types/node": "^24.6.2",
+    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/parser": "^8.45.0",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-sonarjs": "^3.0.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "semantic-release": "^24.2.9",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "npm run format",
+      "npm run lint:dev",
+      "npm run lint:ci"
+    ]
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "LICENSE_DE",
+    "NOTICE.md",
+    "NOTICE_DE.md"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ]
+    }
+  }
+}

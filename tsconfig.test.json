@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["vitest", "vitest/importMeta", "node"],
+    "rootDir": "."
+  },
+  "include": ["test/unit/**/*.spec.ts"],
+  "exclude": ["dist", "node_modules"]
+}

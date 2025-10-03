@@ -1,8 +1,9 @@
 name: Janeway
 
 on:
-  push:
-    branches: [main, beta, alpha]
+  workflow_run:
+    workflows: ["Tuvok"]
+    types: [completed]
 
 concurrency:
   group: janeway-${{ github.ref }}
@@ -16,6 +17,9 @@ permissions:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success'
+      && github.event.workflow_run.event == 'push'
+      && contains(fromJson('["main","beta","alpha"]'), github.event.workflow_run.head_branch) }}
     runs-on: ubuntu-latest
     env:
       CI: true
@@ -40,10 +44,10 @@ jobs:
       - name: 🖥️ Initialize Starfleet Node (22.18.x + pnpm cache)
         uses: actions/setup-node@v5
         with:
-          node-version: '22.18.x'
-          cache: 'pnpm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@RMajewski'
+          node-version: "22.18.x"
+          cache: "pnpm"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@RMajewski"
 
       - name: 📦 Replicate Dependencies
         run: pnpm install --frozen-lockfile

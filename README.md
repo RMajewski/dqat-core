@@ -10,7 +10,7 @@ The heart of the DQAT framework, providing directives, test context, mocking fac
 
 ## 🖖 Continuous Integration – Tuvok
 
-All commits and pull requests are scanned by the **Tuvok** workflow.
+All commits and pull requests are scanned by the **Tuvok** workflow (named after Voyager’s Security Officer).
 Tuvok ensures that:
 
 - 📡 Repository is checked out and dependencies are replicated

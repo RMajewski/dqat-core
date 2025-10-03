@@ -2,7 +2,7 @@ name: Janeway
 
 on:
   workflow_run:
-    workflows: ["Tuvok"]
+    workflows: ['Tuvok']
     types: [completed]
 
 concurrency:
@@ -48,10 +48,10 @@ jobs:
       - name: 🖥️ Initialize Starfleet Node (22.18.x + pnpm cache)
         uses: actions/setup-node@v5
         with:
-          node-version: "22.18.x"
-          cache: "pnpm"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@RMajewski"
+          node-version: '22.18.x'
+          cache: 'pnpm'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@RMajewski'
 
       - name: 📦 Replicate Dependencies
         run: pnpm install --frozen-lockfile

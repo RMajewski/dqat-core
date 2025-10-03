@@ -28,7 +28,6 @@ const noConsoleRule = consoleRuleByEnvironment[deploymentEnvironment] ?? 'off';
 // Regeln, die OHNE Type-Info laufen
 const commonTypeScriptRules = {
   curly: ['error', 'all'],
-  'brace-style': ['error', '1tbs', { allowSingleLine: false }],
 
   // Kernregeln, die durch TS-Variante ersetzt werden
   'no-unused-vars': 'off',
@@ -116,6 +115,14 @@ export default [
     ],
   },
 
+  {
+    plugins: { prettier },
+    rules: {
+      ...eslintConfigPrettier.rules,
+      'prettier/prettier': 'error',
+    },
+  },
+
   // Basis-Kernregeln von ESLint
   js.configs.recommended,
 
@@ -179,13 +186,6 @@ export default [
           prefer: 'no-type-imports',
         },
       ],
-    },
-  },
-  {
-    plugins: { prettier },
-    rules: {
-      ...eslintConfigPrettier.rules,
-      'prettier/prettier': 'error',
     },
   },
 ];

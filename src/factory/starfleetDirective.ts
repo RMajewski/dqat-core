@@ -13,10 +13,6 @@ import type {
  * - **Immutable Rückgaben**: optionaler Deep-Freeze, um Mutationen in Tests zu vermeiden.
  * - **JSON-safe**: Funktionen werden unterdrückt; komplexe Werte werden sicher geklont.
  */
-// src/factories/createStarfleetDirectives.ts
-// Scope: DQAT (reines Testframework)
-// Deterministisch, JSON-safe, optional Deep-Freeze. Schlank, ohne `any`.
-
 export function createStarfleetDirectives(
   providers: readonly StarfleetDirectiveProvider[],
   opts: StarfleetDirectivesOptions = {},
@@ -30,10 +26,14 @@ export function createStarfleetDirectives(
     v !== null && typeof v === 'object';
 
   const deepFreeze = <T>(input: T): T => {
-    if (!doFreeze) return input;
+    if (!doFreeze) {
+      return input;
+    }
     const visited = new WeakSet<object>();
     const visit = (val: unknown): void => {
-      if (!isObjectLike(val) || visited.has(val)) return;
+      if (!isObjectLike(val) || visited.has(val)) {
+        return;
+      }
       visited.add(val);
       Object.freeze(val);
       for (const v of Object.values(val as Record<string, unknown>)) visit(v);
@@ -74,14 +74,18 @@ export function createStarfleetDirectives(
     if (preferFirst) {
       for (const p of providers) {
         const v = sanitize(p.get(key));
-        if (v !== undefined) return v;
+        if (v !== undefined) {
+          return v;
+        }
       }
       return undefined;
     }
     let last: unknown | undefined = undefined;
     for (const p of providers) {
       const v = sanitize(p.get(key));
-      if (v !== undefined) last = v;
+      if (v !== undefined) {
+        last = v;
+      }
     }
     return last;
   };
@@ -94,7 +98,9 @@ export function createStarfleetDirectives(
 
   const resolveDirective: ResolveDirective = (key: string) => {
     const raw = findValue(key);
-    if (raw === undefined) return undefined as unknown;
+    if (raw === undefined) {
+      return undefined as unknown;
+    }
     const cloned = cloneSafe(raw);
     return freezeMaybe(cloned) as unknown;
   };
@@ -108,14 +114,18 @@ export function createStarfleetDirectives(
 
     const shouldSkip = (v: unknown): boolean => typeof v === 'function';
     const assign = (k: string, v: unknown): void => {
-      if (preferFirst && Object.hasOwn(out, k)) return;
+      if (preferFirst && Object.hasOwn(out, k)) {
+        return;
+      }
       out[k] = v;
     };
 
     for (const p of providers) {
       const entries = p.list(prefix);
       for (const [k, v] of Object.entries(entries)) {
-        if (shouldSkip(v)) continue;
+        if (shouldSkip(v)) {
+          continue;
+        }
         assign(k, v);
       }
     }

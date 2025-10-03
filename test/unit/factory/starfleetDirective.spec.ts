@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createStarfleetDirectives } from '../../../src/factory/starfleetDirective';
 import type {
   StarfleetDirectiveProvider,
@@ -130,42 +130,45 @@ describe('createStarfleetDirectives', () => {
         { freeze: false },
       );
       const listed = provider.listDirectives();
-      expect(Object.isFrozen(listed)).toBe(false); // deepFreeze wurde aufgerufen, aber mit early-return
+      expect(Object.isFrozen(listed)).toBe(false);
     });
 
     it('cloneSafe: nutzt JSON.parse(JSON.stringify(...)) wenn structuredClone fehlt', () => {
-      const original = (globalThis as any).structuredClone;
-      (globalThis as any).structuredClone = undefined; // Pfad erzwingen
+      vi.stubGlobal('structuredClone', undefined);
+
       try {
-        const object = { a: { b: 1 } };
+        const object = { a: { b: 1 } } as const;
         const provider = make(
           [new StubStarfleetDirectiveProvider('A', { obj: object })],
-          { freeze: false },
-        );
-        const result = provider.resolveDirective<typeof object>('obj');
-        expect(result).toEqual(object);
-        expect(result).not.toBe(object); // tiefe Kopie über JSON-Parse
-      } finally {
-        (globalThis as any).structuredClone = original;
-      }
-    });
-
-    it('cloneSafe: catch-Zweig gibt Original zurück, wenn JSON.stringify wirft (zyklisch)', () => {
-      const original = (globalThis as any).structuredClone;
-      (globalThis as any).structuredClone = undefined; // zwingt JSON-Stringify Pfad
-      try {
-        const circle: any = {};
-        circle.self = circle; // zyklische Referenz ⇒ JSON.stringify wirft
-        const provider = make(
-          [new StubStarfleetDirectiveProvider('A', { circ: circle })],
           {
             freeze: false,
           },
         );
-        const result = provider.resolveDirective<typeof circle>('circ');
+
+        const result = provider.resolveDirective<typeof object>('obj')!;
+        expect(result).toEqual(object);
+        expect(result).not.toBe(object); // tiefe Kopie via JSON-Parse
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    });
+
+    it('cloneSafe: catch-Zweig gibt Original zurück, wenn JSON.stringify wirft (zyklisch)', () => {
+      vi.stubGlobal('structuredClone', undefined);
+
+      try {
+        type Recursive = { self?: Recursive };
+        const circle: Recursive = {};
+        circle.self = circle; // zyklisch ⇒ JSON.stringify wirft
+
+        const provider = make(
+          [new StubStarfleetDirectiveProvider('A', { circ: circle })],
+          { freeze: false },
+        );
+        const result = provider.resolveDirective<Recursive>('circ');
         expect(result).toBe(circle); // catch → return val
       } finally {
-        (globalThis as any).structuredClone = original;
+        vi.unstubAllGlobals();
       }
     });
   });

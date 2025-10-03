@@ -22,11 +22,15 @@ export class StubStarfleetDirectiveProvider
   }
 
   list(prefix?: string): Record<string, unknown> {
-    if (!prefix) return { ...this.map };
+    if (!prefix) {
+      return { ...this.map };
+    }
     const out: Record<string, unknown> = {};
     const start = prefix + this.sep;
-    for (const [k, v] of Object.entries(this.map)) {
-      if (k === prefix || k.startsWith(start)) out[k] = v;
+    for (const [key, value] of Object.entries(this.map)) {
+      if (key === prefix || key.startsWith(start)) {
+        out[key] = value;
+      }
     }
     return out;
   }

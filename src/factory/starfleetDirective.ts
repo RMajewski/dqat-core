@@ -36,7 +36,9 @@ export function createStarfleetDirectives(
       }
       visited.add(val);
       Object.freeze(val);
-      for (const v of Object.values(val as Record<string, unknown>)) visit(v);
+      for (const v of Object.values(val as Record<string, unknown>)) {
+        visit(v);
+      }
     };
     visit(input as unknown);
     return input;

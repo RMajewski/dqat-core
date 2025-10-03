@@ -27,6 +27,9 @@ const noConsoleRule = consoleRuleByEnvironment[deploymentEnvironment] ?? 'off';
 
 // Regeln, die OHNE Type-Info laufen
 const commonTypeScriptRules = {
+  curly: ['error', 'all'],
+  'brace-style': ['error', '1tbs', { allowSingleLine: false }],
+
   // Kernregeln, die durch TS-Variante ersetzt werden
   'no-unused-vars': 'off',
   'no-undef': 'off',

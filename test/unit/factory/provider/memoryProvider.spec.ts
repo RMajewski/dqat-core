@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { MemoryProviderOptions } from '../../../../src/factory/provider/memoryProvider';
 import { MemoryProvider } from '../../../../src/factory/provider/memoryProvider';
+import type { MemoryProviderOptions } from '../../../../src/type/provider/memoryProviderOptions';
 
 const make = (input: unknown, opts?: MemoryProviderOptions): MemoryProvider =>
   new MemoryProvider(input as Record<string, unknown>, opts);

@@ -5,14 +5,19 @@ module.exports = {
     import: [
       'tsx/register',
       'test/acceptance/setup.ts',
-      'test/acceptance/steps/**/*.ts',
+      'test/acceptance/step/**/*.ts',
+      'src/step/**/*.ts',
     ],
+    formatOptions: {
+      snippetInterface: 'async-await',
+    },
     language: 'de',
     publishQuiet: true,
     format: [
       'progress-bar',
       'html:test/reports/cucumber/index.html',
       'summary',
+      'snippets:test/reports/cucumber/snippets.txt',
     ],
     // dryRun: true,
   },

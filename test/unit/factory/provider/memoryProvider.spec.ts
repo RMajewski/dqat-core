@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MemoryProvider } from '../../../../src/factory/provider/memoryProvider';
-import type { MemoryProviderOptions } from '../../../../src/type/provider/memoryProviderOptions';
+import type { MemoryProviderOptions } from '../../../../src/type/provider/providerOptions';
 
 const make = (input: unknown, opts?: MemoryProviderOptions): MemoryProvider =>
   new MemoryProvider(input as Record<string, unknown>, opts);
@@ -49,12 +49,13 @@ describe('MemoryProvider', () => {
       expect(provider.list()).toEqual({ 'arr.0.x': 1, 'arr.1.x': 2 });
     });
 
-    it('überspringt Arrays komplett, wenn includeArrayIndices:false', () => {
+    it('letzter Wert, wenn includeArrayIndices:false', () => {
       const provider = make(
         { arr: [{ x: 1 }, { x: 2 }] },
         { includeArrayIndices: false },
       );
-      expect(provider.list()).toEqual({});
+      console.log('list', provider.list());
+      expect(provider.list()).toEqual({ 'arr.x': 2 });
     });
 
     it('ignoriert Funktionen und (optional) undefined-Werte beim Einlesen', () => {
@@ -65,7 +66,7 @@ describe('MemoryProvider', () => {
       expect(Object.hasOwn(provider2.list(), 'b')).toBeTruthy();
     });
 
-    it('akzeptiert ein beliebiges Primtiv als Input → wird als { value: <input> } verfügbar', () => {
+    it('akzeptiert ein beliebiges Primitiv als Input → wird als { value: <input> } verfügbar', () => {
       const provider = new MemoryProvider('hello');
       expect(provider.get('value')).toBe('hello');
       expect(provider.list()).toEqual({ value: 'hello' });

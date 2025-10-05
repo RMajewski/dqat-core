@@ -34,6 +34,7 @@ describe('EnvProvider', () => {
       const environmentObject = { DQ_DB__HOST: 'localhost' };
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
+        toLowerCase: true,
       });
 
       expect(provider.get('db.host')).toBe('localhost');
@@ -46,6 +47,7 @@ describe('EnvProvider', () => {
       };
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
+        toLowerCase: true,
       });
 
       const flattened = provider.list();
@@ -62,6 +64,7 @@ describe('EnvProvider', () => {
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
         doubleUnderscoreIsSeparator: true,
+        toLowerCase: true,
       });
 
       expect(provider.list('app')).toEqual({
@@ -77,7 +80,10 @@ describe('EnvProvider', () => {
         stripPrefix: 'APP_',
         separator: '/',
         doubleUnderscoreIsSeparator: true,
+        toLowerCase: true,
       });
+
+      console.log('list', provider.list());
 
       expect(provider.get('cfg/name')).toBe('voyager');
       expect(provider.list('cfg')).toEqual({ 'cfg/name': 'voyager' });
@@ -103,6 +109,7 @@ describe('EnvProvider', () => {
         stripPrefix: 'DQ_',
         separator: '.',
         doubleUnderscoreIsSeparator: true,
+        toLowerCase: true,
       });
 
       expect(provider.list()).toEqual({ 'valid.key': 'kept' });
@@ -116,6 +123,7 @@ describe('EnvProvider', () => {
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
         parse: true,
+        toLowerCase: true,
       });
 
       expect(provider.get('bool_t')).toBe(true);
@@ -127,6 +135,7 @@ describe('EnvProvider', () => {
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
         parse: true,
+        toLowerCase: true,
       });
 
       expect(provider.get('int')).toBe(42);
@@ -142,6 +151,7 @@ describe('EnvProvider', () => {
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
         parse: true,
+        toLowerCase: true,
       });
 
       expect(provider.get('json_obj')).toEqual({ a: 1, b: [2, 3] });
@@ -154,6 +164,7 @@ describe('EnvProvider', () => {
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
         parse: true,
+        toLowerCase: true,
       });
 
       expect(provider.get('text')).toBe('  not-json  ');
@@ -164,6 +175,7 @@ describe('EnvProvider', () => {
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
         parse: { booleans: true, numbers: false, json: false },
+        toLowerCase: true,
       });
 
       expect(provider.get('x')).toBe(true);
@@ -183,11 +195,13 @@ describe('EnvProvider', () => {
       expect(provider.get('empty')).toBeUndefined();
     });
 
-    it('behält undefined bei includeUndefined=true und liefert für get(...) undefined', () => {
+    it('behält undefined bei dropUndefined=false und liefert für get(...) undefined', () => {
       const environmentObject = { DQ_FOO__BAR: undefined };
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
-        includeUndefined: true,
+        doubleUnderscoreIsSeparator: true,
+        dropUndefined: false,
+        toLowerCase: true,
       });
 
       const flattened = provider.list();
@@ -202,6 +216,7 @@ describe('EnvProvider', () => {
       };
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
+        toLowerCase: true,
       });
 
       expect(provider.list()).toEqual({ present: 'ok' });
@@ -214,6 +229,7 @@ describe('EnvProvider', () => {
       const environmentObject = { DQ_A__B: '1', DQ_C: '2' };
       const provider = makeEnvProvider(environmentObject, {
         stripPrefix: 'DQ_',
+        toLowerCase: true,
       });
 
       const allEntries = provider.list();
@@ -227,8 +243,8 @@ describe('EnvProvider', () => {
         stripPrefix: 'DQ_',
       });
 
-      expect(typeof provider.get('fn')).toBe('string');
-      expect(provider.list('fn')).toEqual({ fn: '() => 1' });
+      expect(provider.get('fn')).toBeUndefined();
+      expect(provider.list('fn')).toEqual({});
     });
 
     it('exportiert die Klasse direkt (Kontrolltest Import)', () => {

@@ -1,191 +1,123 @@
-import type { MemoryProviderOptions } from '../../type/provider/memoryProviderOptions';
+import type {
+  MemoryProviderOptions,
+  NormalizedMemoryOptions,
+} from '../../type/provider/providerOptions';
 import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective';
+import { flattenObject } from '../../util/provider/flatten';
+import { normalizeMemoryOptions } from '../../util/provider/optionNormalization';
 
 /**
- * Testfreundlicher In-Memory-Provider für Directives.
+ * Provider für In-Memory-Datenquellen (z. B. Mocks/Testdaten).
  *
- * Hinweise:
- * - Funktionen werden bereits beim Einlesen ignoriert.
- * - Der Provider liefert **flache** Keys; `get(key)` erwartet einen exakten Key.
- * - `list(prefix)` gibt nur Keys zurück, die entweder exakt `prefix` sind
- * oder mit `prefix + separator` beginnen.
+ * Implementiert StarfleetDirectiveProvider:
+ * - `name` (z. B. "memory" oder aus Options)
+ * - `get(key)`
+ * - `list(prefix?)`
  */
 export class MemoryProvider implements StarfleetDirectiveProvider {
+  /** Logischer Name des Providers (für Logs/Debugging). */
   public readonly name: string;
-  private readonly map: Record<string, unknown>;
-  private readonly sep: string;
 
-  constructor(input: Record<string, unknown>, options?: MemoryProviderOptions);
+  private readonly options: NormalizedMemoryOptions;
+  private readonly flatData: Record<string, unknown>;
+
+  /**
+   * @param input Einstellungen/Daten, die dieser Provider bereitstellt.
+   * @param inputOptions Steuerung des Flatten-Verhaltens und der Key-Aufbereitung.
+   */
+  constructor(
+    input: Record<string, unknown>,
+    inputOptions?: MemoryProviderOptions,
+  );
   constructor(
     input: string | number | boolean | null | undefined,
-    options?: MemoryProviderOptions,
+    inputOptions?: MemoryProviderOptions,
   );
-  constructor(input: unknown, options: MemoryProviderOptions = {}) {
-    this.name = options.name ?? 'memory';
-    this.sep = options.separator ?? '.';
-    const flatten = options.flatten ?? true;
-    const includeArrayIndices = options.includeArrayIndices ?? true;
-    const dropUndefined = options.dropUndefined ?? true;
+  constructor(input: unknown, inputOptions: MemoryProviderOptions = {}) {
+    this.options = normalizeMemoryOptions(inputOptions ?? {});
+    this.name = this.options.name ?? 'memory';
 
-    const sanitized = sanitizeInput(input);
-    this.map = flatten
-      ? flattenObject(sanitized, {
-          separator: this.sep,
-          includeArrayIndices,
-          dropUndefined,
-        })
-      : filterFlatRecord(sanitized, {
-          dropUndefined,
-        });
+    if (this.isPrimitiveScalar(input)) {
+      if (input === undefined && this.options.dropUndefined) {
+        this.flatData = {};
+      } else {
+        this.flatData = { value: input };
+      }
+      return;
+    }
+
+    if (this.options.flatten) {
+      const flat = flattenObject(input, {
+        separator: this.options.separator,
+        includeArrayIndices: this.options.includeArrayIndices,
+        dropUndefined: this.options.dropUndefined,
+      });
+      this.flatData = this.sanitizeFlatRecord(flat, this.options.dropUndefined);
+      return;
+    }
+
+    this.flatData = this.sanitizeFlatRecord(
+      input as Record<string, unknown>,
+      this.options.dropUndefined,
+    );
   }
 
-  // Rückgabe-Typ ist `unknown` (kann faktisch undefined sein); vermeidet Union mit `unknown`.
-  get(key: string): unknown {
-    return Object.hasOwn(this.map, key) ? this.map[key] : undefined;
+  /** Gibt einen einzelnen Wert zurück. */
+  public get(key: string): unknown {
+    return this.flatData[key];
   }
 
-  list(prefix?: string): Record<string, unknown> {
+  /**
+   * Liefert alle Key-Value-Paare. Optionales Präfix filtert auf Dot-Key-Basis.
+   */
+  public list(prefix?: string): Record<string, unknown> {
     if (!prefix) {
-      return { ...this.map };
+      return { ...this.flatData };
     }
     const out: Record<string, unknown> = {};
-    const base = prefix;
-    const start = base + this.sep;
-    for (const [k, v] of Object.entries(this.map)) {
-      if (k === base || k.startsWith(start)) {
-        out[k] = v;
+    for (const [key, value] of Object.entries(this.flatData)) {
+      if (key.startsWith(prefix)) {
+        out[key] = value;
       }
     }
     return out;
   }
-}
 
-function sanitizeInput(input: unknown): Record<string, unknown> {
-  if (input && typeof input === 'object' && !Array.isArray(input)) {
-    // Shallow-Kopie, Funktionen verwerfen
+  /** Aktive Optionen (Debug/Tests). */
+  public getOptions(): NormalizedMemoryOptions {
+    return this.options;
+  }
+
+  private isPrimitiveScalar(
+    v: unknown,
+  ): v is string | number | boolean | null | undefined {
+    return (
+      v === null ||
+      v === undefined ||
+      typeof v === 'string' ||
+      typeof v === 'number' ||
+      typeof v === 'boolean'
+    );
+  }
+
+  private sanitizeFlatRecord(
+    source: Record<string, unknown>,
+    dropUndefined: boolean,
+  ): Record<string, unknown> {
     const out: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(input as Record<string, unknown>)) {
-      if (typeof v === 'function') {
+    for (const [key, val] of Object.entries(source)) {
+      if (val === undefined) {
+        if (!dropUndefined) {
+          out[key] = undefined;
+        }
         continue;
       }
-      out[String(k)] = v;
+      if (typeof val === 'function') {
+        // niemals Funktionswerte ausgeben
+        continue;
+      }
+      out[key] = val;
     }
     return out;
   }
-  // Für Tests komfortabel: primitiver Wert wird als { value: <input> } verfügbar
-  return { value: input };
-}
-
-type FlattenOpts = {
-  separator: string;
-  includeArrayIndices: boolean;
-  dropUndefined: boolean;
-};
-
-type Frame = { key: string; value: unknown };
-
-const isPlainObject = (v: unknown): v is Record<string, unknown> =>
-  !!v && typeof v === 'object' && !Array.isArray(v);
-
-const shouldSkip = (v: unknown, opts: FlattenOpts): boolean =>
-  typeof v === 'function' || (v === undefined && opts.dropUndefined);
-
-const handleArray = (
-  v: unknown,
-  key: string,
-  stack: Frame[],
-  opts: FlattenOpts,
-  makeKey: (p: string, c: string) => string,
-): boolean => {
-  if (!Array.isArray(v)) {
-    return false;
-  }
-  if (!opts.includeArrayIndices) {
-    return true;
-  } // komplett überspringen
-  for (let i = 0; i < v.length; i++) {
-    stack.push({ key: makeKey(key, String(i)), value: v[i] });
-  }
-  return true;
-};
-
-const handleObject = (
-  v: unknown,
-  key: string,
-  stack: Frame[],
-  out: Record<string, unknown>,
-  makeKey: (p: string, c: string) => string,
-): boolean => {
-  if (!isPlainObject(v)) {
-    return false;
-  }
-  const entries = Object.entries(v);
-  if (entries.length === 0) {
-    if (key) {
-      out[key] = v;
-    }
-    return true;
-  }
-  for (const [k, val] of entries) {
-    stack.push({ key: makeKey(key, String(k)), value: val });
-  }
-  return true;
-};
-
-const commitPrimitive = (
-  key: string,
-  value: unknown,
-  out: Record<string, unknown>,
-): void => {
-  if (key) {
-    out[key] = value;
-  }
-};
-
-function flattenObject(
-  obj: Record<string, unknown>,
-  opts: FlattenOpts,
-  parentKey = '',
-): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
-  const sep = opts.separator;
-  const makeKey = (p: string, c: string): string => (p ? `${p}${sep}${c}` : c);
-
-  const stack: Frame[] = Object.entries(obj).map(([k, v]) => ({
-    key: parentKey ? makeKey(parentKey, String(k)) : String(k),
-    value: v,
-  }));
-
-  while (stack.length) {
-    const { key, value } = stack.pop() as Frame;
-    if (shouldSkip(value, opts)) {
-      continue;
-    }
-    if (handleArray(value, key, stack, opts, makeKey)) {
-      continue;
-    }
-    if (handleObject(value, key, stack, out, makeKey)) {
-      continue;
-    }
-    commitPrimitive(key, value, out);
-  }
-
-  return out;
-}
-
-function filterFlatRecord(
-  rec: Record<string, unknown>,
-  { dropUndefined }: { dropUndefined: boolean },
-): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(rec)) {
-    if (typeof v === 'function') {
-      continue;
-    }
-    if (v === undefined && dropUndefined) {
-      continue;
-    }
-    out[String(k)] = v;
-  }
-  return out;
 }

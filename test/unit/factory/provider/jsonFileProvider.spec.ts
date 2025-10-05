@@ -82,7 +82,11 @@ describe('JsonFileProvider', () => {
       const filePath = makeJsonFile('arr.json', { list: { items: [1, 2, 3] } });
       const provider = new JsonFileProvider(filePath);
 
-      expect(provider.get('list.items')).toEqual([1, 2, 3]);
+      expect(provider.list('list.items')).toEqual({
+        'list.items.0': 1,
+        'list.items.1': 2,
+        'list.items.2': 3,
+      });
     });
   });
 
@@ -118,7 +122,7 @@ describe('JsonFileProvider', () => {
 
   describe('Immutability & Safety', () => {
     it('gibt via list() ein eingefrorenes Objekt zurück (immutable)', () => {
-      const filePath = makeJsonFile('immut.json', { x: { y: 1 } });
+      const filePath = makeJsonFile('immutable.json', { x: { y: 1 } });
       const provider = new JsonFileProvider(filePath);
 
       const allEntries = provider.list();

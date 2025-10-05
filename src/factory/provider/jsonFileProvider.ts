@@ -53,8 +53,6 @@ export class JsonFileProvider implements StarfleetDirectiveProvider {
       includeArrayIndices: true,
       dropUndefined: false,
     });
-
-    console.log('flatData', this.flatData);
   }
 
   /**
@@ -102,7 +100,6 @@ export class JsonFileProvider implements StarfleetDirectiveProvider {
   }
 
   private safeParseJson(content: string, filePath: string): unknown {
-    console.log('safeParseJson', { content, filePath });
     try {
       return JSON.parse(content);
     } catch (caughtError: unknown) {

@@ -35,6 +35,9 @@
     "test:unit:cov": "vitest run --config vitest.unit.config.ts --coverage",
     "test:unit:ci": "vitest run --config vitest.unit.config.ts --reporter=verbose",
     "test:unit:watch": "vitest ./test/unit",
+    "test:acceptance": "cucumber-js --config test/acceptance/cucumber.config.cjs",
+    "test:acceptance:dry": "cucumber-js --config test/acceptance/cucumber.config.cjs --dry-run",
+    "test:acceptance:report": "cucumber-js --config test/acceptance/cucumber.config.cjs --format html:test/reports/cucumber/index.html",
     "typecheck:test": "tsc -p tsconfig.test.json --noEmit"
   },
   "publishConfig": {
@@ -42,6 +45,7 @@
     "access": "restricted"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.2.0",
     "@eslint/js": "^9.36.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
@@ -63,8 +67,12 @@
     "rimraf": "^6.0.1",
     "semantic-release": "^24.2.9",
     "tsup": "^8.5.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "@cucumber/cucumber": "^12.2.0"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [

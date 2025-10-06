@@ -1,0 +1,54 @@
+{
+  // Formatierung & Linting
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // Prettier als Formatter für einzelne Sprachen
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ESLint: Flat Config & validierte Sprachen
+  "eslint.enable": true,
+  "eslint.useFlatConfig": true,
+  "eslint.useESLintClass": true,
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+  "eslint.run": "onSave",
+
+  // Projektkonsistenz bei Dateien
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.eol": "\n",
+
+  // Andere Konfigurationen
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "js/ts.implicitProjectConfig.target": "ESNext",
+
+  // Cucumber-Auto-Complete
+  "[feature]": {
+    "editor.defaultFormatter": "alexkrechik.cucumberautocomplete",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "cucumberautocomplete.steps": [
+    "src/step/**/*.steps.ts",
+    "src/step/*.steps.ts",
+    "test/acceptance/step/**/*.steps.ts",
+    "test/acceptance/step/*.steps.ts"
+  ],
+  "cucumberautocomplete.smartSnippets": true,
+  "cucumberautocomplete.stepsInvariants": true,
+  "cucumberautocomplete.strictGherkinCompletion": true
+}

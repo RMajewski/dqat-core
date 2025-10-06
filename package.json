@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "build:watch": "tsup --watch",
     "clean": "rimraf dist",
     "dev": "tsup --watch --dts false",
     "format": "prettier \"**/*.{css,html,json,md,ts,tsx,vue,yml,yaml}\" --write",
@@ -36,6 +37,7 @@
     "test:unit:ci": "vitest run --config vitest.unit.config.ts --reporter=verbose",
     "test:unit:watch": "vitest ./test/unit",
     "test:acceptance": "cucumber-js --config test/acceptance/cucumber.config.cjs",
+    "test:acceptance:wip": "npm run test:acceptance -- --tags \"@Wip\"",
     "test:acceptance:dry": "cucumber-js --config test/acceptance/cucumber.config.cjs --dry-run",
     "test:acceptance:report": "cucumber-js --config test/acceptance/cucumber.config.cjs --format html:test/reports/cucumber/index.html",
     "typecheck:test": "tsc -p tsconfig.test.json --noEmit"
@@ -59,6 +61,8 @@
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-sonarjs": "^3.0.5",
     "husky": "^9.1.7",
@@ -93,18 +97,43 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/step/*",
+    "./src/step/*"
+  ],
+  "imports": {
+    "#callback": "./src/callback/index.ts",
+    "#setup": "./src/setup/index.ts"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs"
+    },
+    "./callback": {
+      "import": "./dist/callback/index.js",
+      "types": "./dist/callback/index.d.ts",
+      "require": "./dist/callback/index.cjs"
+    },
+    "./setup": {
+      "import": "./dist/setup/index.js",
+      "types": "./dist/setup/index.d.ts",
+      "require": "./dist/setup/index.cjs"
+    },
+    "./step": {
+      "import": "./dist/step/index.js",
+      "types": "./dist/step/index.d.ts",
+      "require": "./dist/step/index.cjs"
     }
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "dist/*"
+      "callback": [
+        "dist/callback/index.d.ts"
+      ],
+      "setup": [
+        "dist/setup/index.d.ts"
       ]
     }
   }

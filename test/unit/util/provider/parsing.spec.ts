@@ -14,15 +14,15 @@ vi.mock('../../../../src/util/provider/parsing.helper', () => ({
   tryParseNumber: vi.fn(),
 }));
 
+import * as parsingHelper from '../../../../src/util/provider/parsing.helper.ts';
 import type {
   EnvParseOptions,
   ParseFlags,
-} from '../../../../src/util/provider/parsing';
+} from '../../../../src/util/provider/parsing.ts';
 import {
   coerceString,
   normalizeParse,
-} from '../../../../src/util/provider/parsing';
-import * as parsingHelper from '../../../../src/util/provider/parsing.helper';
+} from '../../../../src/util/provider/parsing.ts';
 
 describe('Provider-Guards Hilfsfunktionen', () => {
   describe('parsing.normalizeParse', () => {

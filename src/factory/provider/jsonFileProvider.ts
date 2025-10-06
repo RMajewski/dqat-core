@@ -3,11 +3,11 @@ import path, { isAbsolute } from 'node:path';
 import type {
   JsonFileProviderOptions,
   NormalizedJsonFileOptions,
-} from '../../type/provider/providerOptions';
-import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective';
-import { flattenObject } from '../../util/provider/flatten';
-import { isPlainObject } from '../../util/provider/guards';
-import { normalizeJsonFileOptions } from '../../util/provider/optionNormalization';
+} from '../../type/provider/providerOptions.ts';
+import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
+import { flattenObject } from '../../util/provider/flatten.ts';
+import { isPlainObject } from '../../util/provider/guards.ts';
+import { normalizeJsonFileOptions } from '../../util/provider/optionNormalization.ts';
 
 /**
  * Provider zum Laden und Lesen einer JSON-Datei als flache Key-Value-Struktur.

@@ -1,4 +1,4 @@
-import type { StarfleetDirectiveProvider } from '../../../../src/type/starfleetDirective';
+import type { StarfleetDirectiveProvider } from '../../../../src/type/starfleetDirective.ts';
 
 /**
  * Ein sehr einfacher Test-Provider.

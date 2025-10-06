@@ -7,7 +7,7 @@ import {
   pushArrayChildren,
   pushObjectEntries,
   writeTerminal,
-} from '../../../../src/util/provider/flatten';
+} from '../../../../src/util/provider/flatten.ts';
 
 type StackEntry = { key: string | undefined; value: unknown };
 type Out = Record<string, unknown>;

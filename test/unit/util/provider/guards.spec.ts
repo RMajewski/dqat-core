@@ -6,7 +6,7 @@ import {
   isPlainObject,
   isString,
   isUndefined,
-} from '../../../../src/util/provider/guards';
+} from '../../../../src/util/provider/guards.ts';
 
 describe('Provider-Guards Hilfsfunktionen', () => {
   describe('isUndefined', () => {

@@ -6,12 +6,12 @@ import type {
   NormalizedEnvOptions,
   NormalizedJsonFileOptions,
   NormalizedMemoryOptions,
-} from '../../../../src/type/provider/providerOptions';
+} from '../../../../src/type/provider/providerOptions.ts';
 import {
   normalizeEnvOptions,
   normalizeJsonFileOptions,
   normalizeMemoryOptions,
-} from '../../../../src/util/provider/optionNormalization';
+} from '../../../../src/util/provider/optionNormalization.ts';
 import {
   DEFAULT_DOUBLE_UNDERSCORE_IS_SEPARATOR,
   DEFAULT_DROP_UNDEFINED,
@@ -20,7 +20,7 @@ import {
   DEFAULT_INCLUDE_ARRAY_INDICES,
   DEFAULT_SEPARATOR,
   DEFAULT_TO_LOWER_CASE,
-} from '../../../../src/util/provider/providerDefaults';
+} from '../../../../src/util/provider/providerDefaults.ts';
 
 describe('optionNormalization Hilfsfunktionen', () => {
   describe('normalizeEnvOptions', () => {

@@ -2,7 +2,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { JsonFileProvider } from '../../../../src/factory/provider/jsonFileProvider';
+import { JsonFileProvider } from '../../../../src/factory/provider/jsonFileProvider.ts';
 
 /**
  * Erstellt eine temporäre JSON-Datei mit dem gegebenen Inhalt

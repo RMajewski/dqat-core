@@ -1,20 +1,20 @@
 import type {
   EnvProviderOptions,
   NormalizedEnvOptions,
-} from '../../type/provider/providerOptions';
-import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective';
+} from '../../type/provider/providerOptions.ts';
+import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
 import {
   applyStripPrefix,
   mapDoubleUnderscoreToSeparator,
   maybeToLowerCase,
   removeLeadingUnderscores,
-} from '../../util/provider/keyResolution';
-import { normalizeEnvOptions } from '../../util/provider/optionNormalization';
+} from '../../util/provider/keyResolution.ts';
+import { normalizeEnvOptions } from '../../util/provider/optionNormalization.ts';
 import {
   coerceString,
   normalizeParse,
   type ParseFlags,
-} from '../../util/provider/parsing';
+} from '../../util/provider/parsing.ts';
 
 /**
  * Provider zum Lesen von Umgebungsvariablen.

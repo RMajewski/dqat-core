@@ -1,2 +1,1 @@
-export * from './astrometrics';
-export * from './world';
+export * from './world.ts';

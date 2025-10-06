@@ -1,10 +1,10 @@
 import type {
   MemoryProviderOptions,
   NormalizedMemoryOptions,
-} from '../../type/provider/providerOptions';
-import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective';
-import { flattenObject } from '../../util/provider/flatten';
-import { normalizeMemoryOptions } from '../../util/provider/optionNormalization';
+} from '../../type/provider/providerOptions.ts';
+import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
+import { flattenObject } from '../../util/provider/flatten.ts';
+import { normalizeMemoryOptions } from '../../util/provider/optionNormalization.ts';
 
 /**
  * Provider für In-Memory-Datenquellen (z. B. Mocks/Testdaten).

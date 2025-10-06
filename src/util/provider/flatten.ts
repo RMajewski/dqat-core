@@ -1,4 +1,4 @@
-import { isArray, isPlainObject } from './guards';
+import { isArray, isPlainObject } from './guards.ts';
 
 export type FlattenOptions = Readonly<{
   separator: string;

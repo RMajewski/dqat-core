@@ -4,8 +4,8 @@ import {
   tryParseBoolean,
   tryParseJson,
   tryParseNumber,
-} from './parsing.helper';
-import { DEFAULT_ENV_PARSE } from './providerDefaults';
+} from './parsing.helper.ts';
+import { DEFAULT_ENV_PARSE } from './providerDefaults.ts';
 
 /**
  * Flags zur Steuerung der String-Konvertierung.

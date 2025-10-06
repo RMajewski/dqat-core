@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { ParseFlags } from '../../../../src/util/provider/parsing';
 import {
   tryParseBoolean,
   tryParseJson,
   tryParseNumber,
-} from '../../../../src/util/provider/parsing.helper';
+} from '../../../../src/util/provider/parsing.helper.ts';
+import type { ParseFlags } from '../../../../src/util/provider/parsing.ts';
 
 describe('Parsing Hilfsfunktionen', () => {
   describe('tryParseBoolean', () => {

@@ -5,7 +5,7 @@ import {
   mapDoubleUnderscoreToSeparator,
   maybeToLowerCase,
   removeLeadingUnderscores,
-} from '../../../../src/util/provider/keyResolution';
+} from '../../../../src/util/provider/keyResolution.ts';
 
 describe('KeyResolution Hilfsfunktionen', () => {
   describe('buildKey', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EnvProvider } from '../../../../src/factory/provider/envProvider';
+import { EnvProvider } from '../../../../src/factory/provider/envProvider.ts';
 
 const makeEnvProvider = (
   environmentObject: Record<string, string | undefined>,

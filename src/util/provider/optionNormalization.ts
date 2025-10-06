@@ -7,8 +7,8 @@ import type {
   NormalizedEnvOptions,
   NormalizedJsonFileOptions,
   NormalizedMemoryOptions,
-} from '../../type/provider/providerOptions';
-import { normalizeParse } from './parsing';
+} from '../../type/provider/providerOptions.ts';
+import { normalizeParse } from './parsing.ts';
 import {
   DEFAULT_DOUBLE_UNDERSCORE_IS_SEPARATOR,
   DEFAULT_DROP_UNDEFINED,
@@ -17,7 +17,7 @@ import {
   DEFAULT_INCLUDE_ARRAY_INDICES,
   DEFAULT_SEPARATOR,
   DEFAULT_TO_LOWER_CASE,
-} from './providerDefaults';
+} from './providerDefaults.ts';
 
 /**
  * Normalisiert Optionen für den Env-Provider.

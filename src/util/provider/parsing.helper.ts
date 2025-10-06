@@ -1,5 +1,5 @@
-import { isNumberLike } from './guards';
-import type { ParseFlags } from './parsing';
+import { isNumberLike } from './guards.ts';
+import type { ParseFlags } from './parsing.ts';
 
 /**
  * Versucht, eine JSON-Repräsentation zu parsen, falls `flags.json` aktiv ist.

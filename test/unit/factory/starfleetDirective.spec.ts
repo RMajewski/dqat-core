@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createStarfleetDirectives } from '../../../src/factory/starfleetDirective';
+import { createStarfleetDirectives } from '../../../src/factory/starfleetDirective.ts';
 import type {
   StarfleetDirectiveProvider,
   StarfleetDirectives,
-} from '../../../src/type/starfleetDirective';
-import { StubStarfleetDirectiveProvider } from './provider/stubProvider';
+} from '../../../src/type/starfleetDirective.ts';
+import { StubStarfleetDirectiveProvider } from './provider/stubProvider.ts';
 
 const make = (
   providers: StarfleetDirectiveProvider[],

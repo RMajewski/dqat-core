@@ -2,7 +2,7 @@ import type {
   StarfleetDirectiveProvider,
   StarfleetDirectives,
   StarfleetDirectivesOptions,
-} from '../type/starfleetDirective';
+} from '../type/starfleetDirective.ts';
 
 /**
  * Erstellt eine StarfleetDirectives-Instanz aus einer geordneten Provider-Kette.

@@ -1,5 +1,7 @@
 # language: de
-@astrometrics @tags
+@astrometrics
+@tags
+@Wip
 Funktionalität: Ungültige Tags werden fehlertolerant behandelt
   Um Stabilität zu sichern,
   möchte ich ungültige Tag-Werte ignorieren und warnen.

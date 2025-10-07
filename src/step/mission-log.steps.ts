@@ -1,29 +1,27 @@
 import { Then, When } from '@cucumber/cucumber';
+import {
+  missionLogContainsATimestampFromWorldTime,
+  missionLogHasEntryWithLevelToIgnoredTags,
+  missionLogTheDetailsContainCorrelationWithRunIdAndScenarioIdAndStepId,
+  missionLogWriteEntryWithLevelAndMessage,
+} from '../callback/mission-log.ts';
 
 When(
   'ich einen Missionslog-Eintrag mit Level {string} und Nachricht {string} schreibe',
-  async function (level: string, message: string) {
-    return 'pending';
-  },
+  missionLogWriteEntryWithLevelAndMessage,
 );
 
 Then(
   'enthält der Eintrag einen Zeitstempel aus der World-Zeit',
-  async function () {
-    return 'pending';
-  },
+  missionLogContainsATimestampFromWorldTime,
 );
 
 Then(
   'die Details enthalten correlation mit runId, scenarioId und stepId',
-  async function () {
-    return 'pending';
-  },
+  missionLogTheDetailsContainCorrelationWithRunIdAndScenarioIdAndStepId,
 );
 
 Then(
   'existiert ein Missionslog-Eintrag mit Level {string} zu den ignorierten Tags',
-  async function (level: string) {
-    return 'pending';
-  },
+  missionLogHasEntryWithLevelToIgnoredTags,
 );

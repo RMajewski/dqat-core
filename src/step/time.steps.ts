@@ -42,3 +42,24 @@ Then(
     return 'pending';
   },
 );
+
+When(
+  'ich die Systemzeit und die World-Zeit parallel notiere',
+  async function () {
+    return 'pending';
+  },
+);
+
+Then(
+  'liegt die World-Zeit exakt {int} Millisekunden über der Systemzeit',
+  async function (milliseconds: number) {
+    return 'pending';
+  },
+);
+
+Then(
+  'liegt die World-Zeit exakt {int} Millisekunden unter der Systemzeit',
+  async function (milliseconds: number) {
+    return 'pending';
+  },
+);

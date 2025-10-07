@@ -1,8 +1,7 @@
-import { Given } from '@cucumber/cucumber';
+import { worldInit } from '#callback';
+import { Given, When } from '@cucumber/cucumber';
 
-Given('die World ist initialisiert', async function () {
-  return 'pending';
-});
+Given('die World ist initialisiert', worldInit);
 
 Given(
   'ein WorldSeed mit dem Wert {string} ist gesetzt',
@@ -10,3 +9,11 @@ Given(
     return 'pending';
   },
 );
+
+When('das Szenario startet', async function () {
+  return 'pending';
+});
+
+When('das Szenario endet', async function () {
+  return 'pending';
+});

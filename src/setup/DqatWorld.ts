@@ -1,5 +1,9 @@
 import type { IWorldOptions } from '@cucumber/cucumber';
 import type { ICucumberWorld } from '../type/ICucumberWorld.ts';
+import type {
+  MissionLogEntry,
+  MissionLogLevel,
+} from '../type/astrometrics/missionLog.ts';
 
 /**
  * DQAT-World (Iteration 1 – ohne Astrometrics-Implementierung)
@@ -23,12 +27,7 @@ export class DqatWorld implements ICucumberWorld {
   /**
    * Einfache Missionslogs (nur für Debug dieser Iteration)
    */
-  private missionLogBuffer: Array<{
-    timestamp: Date;
-    level: 'info' | 'warn' | 'error';
-    message: string;
-    details?: Record<string, unknown>;
-  }> = [];
+  private missionLogBuffer: Array<MissionLogEntry> = [];
 
   /**
    * LIFO-Stack für Disposer-Funktionen (Cleanup am Szenarioende)
@@ -60,7 +59,7 @@ export class DqatWorld implements ICucumberWorld {
    * Spätere Iteration delegiert an Astrometrics.missionLog().append(...)
    */
   public log = (
-    level: 'info' | 'warn' | 'error',
+    level: MissionLogLevel,
     message: string,
     details?: Record<string, unknown>,
   ): void => {
@@ -105,5 +104,9 @@ export class DqatWorld implements ICucumberWorld {
       }
     }
     return { disposed: disposedCount };
+  }
+
+  public getMissionLogBuffer(): MissionLogEntry[] {
+    return this.missionLogBuffer;
   }
 }

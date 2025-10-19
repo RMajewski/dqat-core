@@ -103,6 +103,7 @@ const sonarJsRules = {
   'sonarjs/no-small-switch': 'error',
   'sonarjs/prefer-immediate-return': 'error',
   'sonarjs/todo-tag': 'warn',
+  'sonarjs/function-return-type': 'off',
 };
 
 // Lokale relative Importe Dateiendung erzwingen

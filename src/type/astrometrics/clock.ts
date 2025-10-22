@@ -2,12 +2,12 @@ export type ClockMode = 'realtime' | 'frozen' | 'monotonic';
 
 export interface SetAnchorParams {
   /**
-   * Optionaler Moduswechsel.
+   * Optionaler Modus-Wechsel.
    */
   mode?: ClockMode;
 
   /**
-   * Neuer Anker (Date | ISO-String | Epoch-Millis).
+   * Neuer Anker (Date | ISO-String | Epoch-Milliseconds).
    */
   anchor?: Date | number | string;
 

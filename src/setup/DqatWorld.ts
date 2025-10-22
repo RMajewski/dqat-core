@@ -1,4 +1,5 @@
 import type { IWorldOptions } from '@cucumber/cucumber';
+import type { Astrometrics } from '../astrometrics/astrometrics.ts';
 import type { ICucumberWorld } from '../type/ICucumberWorld.ts';
 import type {
   MissionLogEntry,
@@ -19,6 +20,8 @@ import type {
  * – Wirkung der Tags über eine echte Astrometrics-Instanz
  */
 export class DqatWorld implements ICucumberWorld {
+  public astrometrics?: Astrometrics;
+
   /**
    * Szenario-lokaler Key-Value-Speicher
    */
@@ -37,22 +40,37 @@ export class DqatWorld implements ICucumberWorld {
   constructor(_options: IWorldOptions) {}
 
   /**
-   * Liefert die aktuelle Zeit.
-   * In dieser Iteration: echte Systemzeit (wird später durch Astrometrics.now() ersetzt).
+   * Liefert die aktuelle Zeit der World.
+   *
+   * Semantik:
+   * - Wenn Astrometrics vorhanden ist: nutze ausschließlich `astrometrics.now()`.
+   * - Andernfalls Fallback auf echte Systemzeit (`new Date()`), z. B. in sehr frühen Hooks.
+   *
+   * Dadurch sind alle Zeitabfragen über die World zentralisiert und
+   * respektieren die gesetzte Clock (frozen, offset, advance, etc.).
    */
-  public now = (): Date => new Date();
+  public now = (): Date => {
+    if (this.astrometrics) {
+      return this.astrometrics.now();
+    }
+    return new Date();
+  };
 
   /**
    * Liest einen Wert aus dem szenario-lokalen Store.
+   *
+   * @returns T | undefined, wenn Schlüssel nicht gesetzt ist
    */
-  public get = (key: string): unknown => this.runtimeStore.get(key);
+  public get<T = unknown>(key: string): T | undefined {
+    return this.runtimeStore.get(key) as T | undefined;
+  }
 
   /**
    * Schreibt einen Wert in den szenario-lokalen Store (überschreibt vorhandene Werte).
    */
-  public set = (key: string, value: unknown): void => {
+  public set<T = unknown>(key: string, value: T): void {
     this.runtimeStore.set(key, value);
-  };
+  }
 
   /**
    * Fügt einen Missionslog-Eintrag hinzu (nur Puffer für diese Iteration).

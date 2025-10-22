@@ -44,7 +44,7 @@ export class AstrometricsClock {
   /**
    * Optional: Seed der Testwelt (nur zu Debug/Tracing in v1).
    */
-  private seedValue: string | number | undefined;
+  private seedValue?: string | number;
 
   /**
    * Erstellt eine neue Clock-Instanz (nur Skelett). In Iteration 1 werden
@@ -89,8 +89,8 @@ export class AstrometricsClock {
    * v1 (Skelett): Noch ohne Berechnungslogik; wird in GREEN implementiert.
    */
   public now(): Date {
-    const utcMillis = this.computeUtcMilliseconds();
-    return new Date(this.roundToPrecision(utcMillis));
+    const utcMilliseconds = this.computeUtcMilliseconds();
+    return new Date(this.roundToPrecision(utcMilliseconds));
   }
 
   /**
@@ -116,7 +116,7 @@ export class AstrometricsClock {
     // --- Anker vorbereiten ---
     const nextAnchorMs = this.parseAnchorToUtcMs(params.anchor);
 
-    // --- Moduswechsel ---
+    // --- Modus-Wechsel ---
     if (nextMode === 'frozen') {
       this.applyFrozenMode(nextAnchorMs);
     } else if (nextMode === 'monotonic') {
@@ -157,8 +157,12 @@ export class AstrometricsClock {
     return { now: this.now() };
   }
 
+  public getSeed(): string | number | undefined {
+    return this.seedValue;
+  }
+
   /**
-   * Parst einen Ankerwert in UTC-Millis.
+   * Parst einen Ankerwert in UTC-Millisekunden.
    */
   protected parseAnchorToUtcMs(
     anchor: Date | number | string | undefined,

@@ -1,3 +1,5 @@
+import type { Astrometrics } from '../astrometrics/astrometrics.ts';
+
 /**
  * Beschreibt die gemeinsame World-Schnittstelle für Szenarien.
  * Keine Implementierung, nur Typdefinition.
@@ -7,8 +9,15 @@
  * - Astrometrics wird später hier eingebunden (Komposition)
  */
 export interface ICucumberWorld {
-  // Platzhalter für spätere Astrometrics-Integration
-  // astrometrics: Astrometrics; // kommt in M1-Implementierung
+  /**
+   * Instanz der Astrometrics-World-Zeit.
+   *
+   * Zweck:
+   * - Liefert eine deterministische Referenzzeit für Assertions.
+   * - Ermöglicht kontrolliertes Vorwärtsbewegen der Zeit (z. B. in „frozen“/„monotonic“).
+   * - Bleibt unabhängig von der Systemzeit des SUT (kein Seiteneffekt auf das Produktivsystem).
+   */
+  astrometrics?: Astrometrics;
 
   /**
    * Kurzform für Zeit (wird später an Astrometrics delegiert).

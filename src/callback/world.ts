@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { Astrometrics } from '../astrometrics/astrometrics.ts';
 import type { DqatWorld } from '../setup/index.ts';
 
 /**
@@ -12,6 +13,8 @@ import type { DqatWorld } from '../setup/index.ts';
  * ```
  */
 export function worldInit(this: DqatWorld): void {
+  this.astrometrics ??= new Astrometrics();
+
   // Minimalchecks auf die im Setup bereitgestellten Funktionen
   assert.strictEqual(
     typeof this.get,

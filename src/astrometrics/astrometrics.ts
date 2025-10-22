@@ -1,27 +1,5 @@
-import type { ClockMode } from '../type/astrometrics/clock.ts';
+import type { AstrometricsInitTags } from '../type/astrometrics/astrometrics.ts';
 import { AstrometricsClock } from './clock.ts';
-
-export interface AstrometricsInitTags {
-  /**
-   * Aus Tags: @clock:system|frozen|monotonic
-   */
-  clockMode?: ClockMode | 'system';
-
-  /**
-   * Aus Tags: @clockOffset:<ms>
-   */
-  clockOffsetMs?: number;
-
-  /**
-   * Optional: @worldSeed:* (nur Spiegelung)
-   */
-  worldSeed?: string | number;
-
-  /**
-   * Optionaler Startanker (z.B. aus Step)
-   */
-  anchor?: Date | number | string;
-}
 
 export class Astrometrics {
   /**
@@ -33,16 +11,23 @@ export class Astrometrics {
    * Erstellt eine Astrometrics-Instanz und konfiguriert die Clock aus Tags.
    */
   public constructor(init?: AstrometricsInitTags) {
-    // TODO: Tags in ClockOptions übersetzen ("system" ⇒ "realtime", Offset/Anker setzen)
-    // Hinweis: In Iteration 1 noch ohne Seiteneffekte (Store/MissionLog etc.).
-    this.clock = new AstrometricsClock();
+    const modeFromTag =
+      init?.clockMode === 'system' ? 'realtime' : init?.clockMode;
+
+    this.clock = new AstrometricsClock({
+      mode: modeFromTag ?? 'realtime',
+      offsetMs: Number.isFinite(init?.clockOffsetMs as number)
+        ? Number(init?.clockOffsetMs)
+        : 0,
+      anchor: init?.anchor,
+      seedValue: init?.worldSeed,
+    });
   }
 
   /**
    * Gibt die aktuelle World-Zeit zurück (Delegation an Clock).
    */
   public now(): Date {
-    // TODO: Delegation implementieren, sobald Clock.now() GREEN ist
-    throw new Error('NotImplemented: Astrometrics.now');
+    return this.clock.now();
   }
 }

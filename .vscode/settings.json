@@ -50,5 +50,6 @@
   ],
   "cucumberautocomplete.smartSnippets": true,
   "cucumberautocomplete.stepsInvariants": true,
-  "cucumberautocomplete.strictGherkinCompletion": true
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  "cucumberautocomplete.syncfeatures": "test/features/**/*.feature"
 }

@@ -67,6 +67,7 @@
     "eslint-plugin-sonarjs": "^3.0.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.3",
+    "mockserver-node": "^5.15.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "semantic-release": "^24.2.9",
@@ -136,5 +137,8 @@
         "dist/setup/index.d.ts"
       ]
     }
+  },
+  "dependencies": {
+    "ajv": "^8.17.1"
   }
 }

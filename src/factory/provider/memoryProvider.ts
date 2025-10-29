@@ -1,8 +1,8 @@
 import type {
-  MemoryProviderOptions,
+  IMemoryProviderOptions,
   NormalizedMemoryOptions,
 } from '../../type/provider/providerOptions.ts';
-import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
+import type { IStarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
 import { flattenObject } from '../../util/provider/flatten.ts';
 import { normalizeMemoryOptions } from '../../util/provider/optionNormalization.ts';
 
@@ -14,7 +14,7 @@ import { normalizeMemoryOptions } from '../../util/provider/optionNormalization.
  * - `get(key)`
  * - `list(prefix?)`
  */
-export class MemoryProvider implements StarfleetDirectiveProvider {
+export class MemoryProvider implements IStarfleetDirectiveProvider {
   /** Logischer Name des Providers (für Logs/Debugging). */
   public readonly name: string;
 
@@ -27,13 +27,13 @@ export class MemoryProvider implements StarfleetDirectiveProvider {
    */
   constructor(
     input: Record<string, unknown>,
-    inputOptions?: MemoryProviderOptions,
+    inputOptions?: IMemoryProviderOptions,
   );
   constructor(
     input: string | number | boolean | null | undefined,
-    inputOptions?: MemoryProviderOptions,
+    inputOptions?: IMemoryProviderOptions,
   );
-  constructor(input: unknown, inputOptions: MemoryProviderOptions = {}) {
+  constructor(input: unknown, inputOptions: IMemoryProviderOptions = {}) {
     this.options = normalizeMemoryOptions(inputOptions ?? {});
     this.name = this.options.name ?? 'memory';
 

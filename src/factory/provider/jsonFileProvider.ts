@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path, { isAbsolute } from 'node:path';
 import type {
-  JsonFileProviderOptions,
+  IJsonFileProviderOptions,
   NormalizedJsonFileOptions,
 } from '../../type/provider/providerOptions.ts';
-import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
+import type { IStarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
 import { flattenObject } from '../../util/provider/flatten.ts';
 import { isPlainObject } from '../../util/provider/guards.ts';
 import { normalizeJsonFileOptions } from '../../util/provider/optionNormalization.ts';
@@ -17,14 +17,17 @@ import { normalizeJsonFileOptions } from '../../util/provider/optionNormalizatio
  * - `get(key)`
  * - `list(prefix?)`
  */
-export class JsonFileProvider implements StarfleetDirectiveProvider {
+export class JsonFileProvider implements IStarfleetDirectiveProvider {
   public readonly name: string;
 
   private readonly options: NormalizedJsonFileOptions;
   private readonly filePath: string;
   private readonly flatData: Record<string, unknown>;
 
-  public constructor(fileName: string, inputOptions?: JsonFileProviderOptions) {
+  public constructor(
+    fileName: string,
+    inputOptions?: IJsonFileProviderOptions,
+  ) {
     this.options = normalizeJsonFileOptions(inputOptions ?? {});
     this.name = this.options.name ?? 'json';
 

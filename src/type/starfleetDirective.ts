@@ -3,7 +3,7 @@
  * z.B. In-Memory, Umgebungsvariablen oder JSON-Dateien. Provider dürfen Plattformdetails
  * enthalten, die Kern-Typen bleiben davon unabhängig.
  */
-export interface StarfleetDirectiveProvider {
+export interface IStarfleetDirectiveProvider {
   /**
    * Logischer Name des Providers (z.B. „memory“, „env“, „json“). Hilft beim Debugging
    * und in Log-Ausgaben. Namen sollten innerhalb einer Instanz eindeutig sein.
@@ -28,7 +28,7 @@ export interface StarfleetDirectiveProvider {
  * Öffentliche API für Tests/Framework-Komponenten, um deterministisch auf
  * Test-Konfigurationen („Directives“) zuzugreifen – unabhängig von der Quelle.
  */
-export interface StarfleetDirectives {
+export interface IStarfleetDirectives {
   /**
    * Exakten Key auflösen; unbekannt → `undefined` (kein Throw).
    * Beispiel: `resolveDirective('frontend.baseUrl')`.

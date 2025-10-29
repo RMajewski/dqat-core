@@ -1,4 +1,32 @@
 /**
+ * @file StarfleetDirectives – zentrale Framework-Konfiguration
+ *
+ * Diese Datei definiert:
+ * 1. Standard-Pfadangaben der DQAT-Konfigurationsdateien (Reihenfolge wichtig!)
+ * 2. Provider-Defaults, die von den jeweiligen Provider-Konstruktoren genutzt werden.
+ *
+ * Hinweis:
+ * - Diese Datei darf beliebig angepasst werden, z. B. um weitere
+ *   Konfigurationsdateien aufzunehmen oder Standards zu ändern.
+ * - Die Werte werden **nicht** direkt verändert; Provider rufen intern ihre
+ *   normalize-Funktionen auf, um fehlende Felder zu ergänzen.
+ */
+
+/**
+ * In dieser Reihenfolge werden Konfigurations-Dateien geprüft und geladen.
+ * Nur existierende Dateien werden berücksichtigt.
+ *
+ * Die Reihenfolge entspricht gleichzeitig der Priorität:
+ * - Früher geladene Dateien liefern Basiskonfigurationen
+ * - Später geladene Dateien überschreiben Werte früherer
+ */
+export const STARFLEET_DIRECTIVE_CONFIG_FILES = [
+  './dqat.config.json',
+  './test/dqat.config.json',
+  './test/acceptance/dqat.config.json',
+] as const;
+
+/**
  * Standard-Trennzeichen für verschachtelte Schlüssel.
  * Beispiel: "database.host" → Trenner "."
  */

@@ -1,6 +1,6 @@
 import type {
-  StarfleetDirectiveProvider,
-  StarfleetDirectives,
+  IStarfleetDirectiveProvider,
+  IStarfleetDirectives,
   StarfleetDirectivesOptions,
 } from '../type/starfleetDirective.ts';
 
@@ -14,9 +14,9 @@ import type {
  * - **JSON-safe**: Funktionen werden unterdrückt; komplexe Werte werden sicher geklont.
  */
 export function createStarfleetDirectives(
-  providers: readonly StarfleetDirectiveProvider[],
+  providers: readonly IStarfleetDirectiveProvider[],
   opts: StarfleetDirectivesOptions = {},
-): StarfleetDirectives {
+): IStarfleetDirectives {
   const preferFirst = opts.preferFirst ?? true;
   const doFreeze = opts.freeze ?? true;
 

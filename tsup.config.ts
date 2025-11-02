@@ -17,4 +17,5 @@ export default defineConfig({
   target: 'node22',
   treeshake: true,
   skipNodeModulesBundle: true,
+  tsconfig: './tsconfig.framework.json',
 });

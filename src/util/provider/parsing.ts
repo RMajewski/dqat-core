@@ -1,11 +1,11 @@
 // src/util/provider/parsing.ts
 
+import { DEFAULT_ENV_PARSE } from '../../config/starfleetDirectives.config.ts';
 import {
   tryParseBoolean,
   tryParseJson,
   tryParseNumber,
 } from './parsing.helper.ts';
-import { DEFAULT_ENV_PARSE } from './providerDefaults.ts';
 
 /**
  * Flags zur Steuerung der String-Konvertierung.

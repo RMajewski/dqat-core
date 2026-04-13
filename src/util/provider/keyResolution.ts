@@ -1,3 +1,6 @@
+import type { TStarfleetDirectiveKey } from '../../config/starfleetDirectives.keys.ts';
+import { StarfleetDirectiveKey } from '../../config/starfleetDirectives.keys.ts';
+
 /**
  * Entfernt ein optionales Präfix am Anfang eines Schlüssels.
  * Beispiel:
@@ -83,4 +86,32 @@ export function buildKey(
   separator: string,
 ): string {
   return parent ? `${parent}${separator}${current}` : current;
+}
+
+/**
+ * Prüft zur Laufzeit, ob der übergebene Schlüssel ein gültiger
+ * Starfleet-Directive-Key ist. Die Validierung erfolgt anhand der
+ * tatsächlichen Werte des Objekts `StarfleetDirectiveKey`.
+ *
+ * Diese Funktion dient als Runtime-Type-Guard, um unsichere Eingaben
+ * (z. B. aus Feature-Dateien, ENV-Werten oder JSON-Konfigurationen)
+ * abzusichern und anschließend das präzise Union-Type
+ * `TStarfleetDirectiveKey` nutzen zu können.
+ *
+ * @example
+ * const key = 'envProviderOptions';
+ * if (isStarfleetDirectiveKey(key)) {
+ *   // innerh. dieses Blocks ist key vom Typ TStarfleetDirectiveKey
+ *   const value = directives.resolveDirective(key);
+ * }
+ *
+ * @param candidateKey - Schlüssel, der geprüft werden soll.
+ * @returns `true`, wenn der Schlüssel im Union-Type enthalten ist.
+ */
+export function isStarfleetDirectiveKey(
+  candidateKey: string,
+): candidateKey is TStarfleetDirectiveKey {
+  return Object.values(StarfleetDirectiveKey).includes(
+    candidateKey as TStarfleetDirectiveKey,
+  );
 }

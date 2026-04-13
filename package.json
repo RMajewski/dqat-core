@@ -10,7 +10,8 @@
   },
   "packageManager": "pnpm@10.15.0",
   "engines": {
-    "node": "^22.18.0"
+    "node": ">=22.18 <24",
+    "pnpm": ">=10 <11"
   },
   "repository": {
     "type": "git",
@@ -127,6 +128,11 @@
       "import": "./dist/step/index.js",
       "types": "./dist/step/index.d.ts",
       "require": "./dist/step/index.cjs"
+    },
+    "./utils": {
+      "import": "./dist/util/index.js",
+      "types": "./dist/util/index.d.ts",
+      "require": "./dist/util/index.cjs"
     }
   },
   "typesVersions": {

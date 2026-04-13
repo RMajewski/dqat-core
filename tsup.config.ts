@@ -6,6 +6,7 @@ export default defineConfig({
     'src/callback/index.ts',
     'src/setup/index.ts',
     'src/step/index.ts',
+    'src/util/index.ts',
   ],
   format: ['esm', 'cjs'],
   dts: true,

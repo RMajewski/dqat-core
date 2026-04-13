@@ -1,16 +1,14 @@
 name: Janeway
 
 on:
-  workflow_run:
-    workflows: ['Tuvok']
-    types: [completed]
-    branches:
-      - alpha
-      - beta
-      - main
+  workflow_call:
+    inputs:
+      branch_name:
+        required: true
+        type: string
 
 concurrency:
-  group: janeway-${{ github.ref }}
+  group: janeway-${{ inputs.branch_name }}
   cancel-in-progress: true
 
 permissions:
@@ -30,15 +28,10 @@ jobs:
       - name: 🖖 Establish Communications (Checkout)
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.workflow_run.repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
 
       - name: 🔄 Synchronize branch and tags
-        run: |
-          git fetch origin "${{ github.event.workflow_run.head_branch }}" --tags --prune
-          git checkout "${{ github.event.workflow_run.head_branch }}"
-          git reset --hard "origin/${{ github.event.workflow_run.head_branch }}"
+        run: git fetch --tags --force
 
       - name: 🔐 Open Secure Channel (Configure SSH for Deploy-Key)
         run: |
@@ -71,11 +64,9 @@ jobs:
         id: tag
         shell: bash
         run: |
-          branch_name="${{ github.event.workflow_run.head_branch }}"
-
-          if [[ "${branch_name}" == "main" ]]; then
+          if [[ "${{ inputs.branch_name }}" == "main" ]]; then
             echo "tag=latest" >> "$GITHUB_OUTPUT"
-          elif [[ "${branch_name}" == "beta" ]]; then
+          elif [[ "${{ inputs.branch_name }}" == "beta" ]]; then
             echo "tag=beta" >> "$GITHUB_OUTPUT"
           else
             echo "tag=alpha" >> "$GITHUB_OUTPUT"

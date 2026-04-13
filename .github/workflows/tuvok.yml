@@ -42,3 +42,17 @@ jobs:
 
       - name: 🛡️ Holodeck Simulation (Unit Tests CI)
         run: pnpm run test:unit:ci
+
+  janeway-release:
+    name: Janeway
+    needs: [tuvok-security-scan]
+    if: ${{ github.event_name == 'push' && contains(fromJson('["main","beta","alpha"]'), github.ref_name) }}
+    uses: ./.github/workflows/janeway.yml
+    permissions:
+      contents: write
+      packages: write
+      issues: read
+      pull-requests: read
+    with:
+      branch_name: ${{ github.ref_name }}
+    secrets: inherit

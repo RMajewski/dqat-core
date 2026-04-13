@@ -1,0 +1,124 @@
+{
+  "$id": "https://dqat.dev/schemas/holodeck.scene.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DQAT Holodeck Scene v1",
+  "description": "Schema definition for deterministic mock scenes (Holodeck).",
+  "type": "object",
+  "required": ["name", "version", "routes"],
+  "additionalProperties": false,
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-zA-Z0-9-]+$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "description": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "variables": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type"],
+        "additionalProperties": false,
+        "properties": {
+          "type": { "enum": ["number", "string", "boolean", "object"] },
+          "default": {},
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "request", "response"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-zA-Z0-9_.-]+$" },
+          "priority": { "type": "integer" },
+          "request": {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": {
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE",
+                  "OPTIONS",
+                  "HEAD"
+                ]
+              },
+              "path": { "type": "string", "pattern": "^/" },
+              "query": {
+                "type": "object",
+                "additionalProperties": {
+                  "oneOf": [
+                    { "type": "string" },
+                    { "type": "array", "items": { "type": "string" } }
+                  ]
+                }
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              },
+              "bodyMatcher": { "type": ["object", "string"] }
+            }
+          },
+          "response": {
+            "type": "object",
+            "required": ["statusCode"],
+            "additionalProperties": false,
+            "properties": {
+              "statusCode": {
+                "type": "integer",
+                "minimum": 100,
+                "maximum": 599
+              },
+              "headers": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              },
+              "body": {},
+              "delayMs": {
+                "oneOf": [
+                  { "type": "integer", "minimum": 0 },
+                  {
+                    "type": "string",
+                    "pattern": "^\\{\\{[a-zA-Z0-9_.-]+\\}\\}$"
+                  }
+                ]
+              }
+            }
+          },
+          "times": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["unlimited"],
+                "properties": { "unlimited": { "const": true } },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": ["remaining"],
+                "properties": {
+                  "remaining": { "type": "integer", "minimum": 1 }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -34,12 +34,20 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
 
-      - name: 🔄 Synchronize branch and tags
+      - name: 🔄 Fetch release branches and tags
         run: |
-          git fetch origin "${{ github.event.workflow_run.head_branch }}" --tags --prune
-          git checkout "${{ github.event.workflow_run.head_branch }}"
-          git reset --hard "origin/${{ github.event.workflow_run.head_branch }}"
+          git fetch origin main:refs/remotes/origin/main
+          git fetch origin beta:refs/remotes/origin/beta
+          git fetch origin alpha:refs/remotes/origin/alpha
+          git fetch --tags --force
 
+      - name: 🔎 Debug git refs
+        run: |
+          git branch -a
+          git rev-parse --verify origin/main
+          git rev-parse --verify origin/beta
+          git rev-parse --verify origin/alpha
+    
       - name: 🔐 Open Secure Channel (Configure SSH for Deploy-Key)
         run: |
           mkdir -p ~/.ssh

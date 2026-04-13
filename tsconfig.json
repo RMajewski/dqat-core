@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "rootDir": "src",
+    "baseUrl": ".",
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
@@ -17,7 +18,13 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "paths": {
+      "#callback": ["src/callback/index.ts"],
+      "#setup": ["src/setup/index.ts"]
+    }
   },
   "include": ["src"],
   "exclude": [

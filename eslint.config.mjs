@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptEslintParser from '@typescript-eslint/parser';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import sonarjs from 'eslint-plugin-sonarjs';
 
@@ -27,6 +28,8 @@ const noConsoleRule = consoleRuleByEnvironment[deploymentEnvironment] ?? 'off';
 
 // Regeln, die OHNE Type-Info laufen
 const commonTypeScriptRules = {
+  curly: ['error', 'all'],
+
   // Kernregeln, die durch TS-Variante ersetzt werden
   'no-unused-vars': 'off',
   'no-undef': 'off',
@@ -90,6 +93,7 @@ const typedOnlyRulesOff = {
   '@typescript-eslint/prefer-optional-chain': 'off',
 };
 
+// SonarJS-Regeln
 const sonarJsRules = {
   ...sonarjs.configs.recommended.rules,
   'sonarjs/cognitive-complexity': ['error', 10],
@@ -99,6 +103,31 @@ const sonarJsRules = {
   'sonarjs/no-small-switch': 'error',
   'sonarjs/prefer-immediate-return': 'error',
   'sonarjs/todo-tag': 'warn',
+  'sonarjs/function-return-type': 'off',
+};
+
+// Lokale relative Importe Dateiendung erzwingen
+const importSettings = {
+  'import/resolver': {
+    typescript: {
+      alwaysTryTypes: true,
+      project: ['./tsconfig.json'],
+    },
+  },
+};
+
+const importRules = {
+  'import/extensions': [
+    'error',
+    'ignorePackages',
+    {
+      ts: 'always',
+      tsx: 'always',
+      js: 'always',
+      mjs: 'always',
+    },
+  ],
+  'import/no-useless-path-segments': ['error', { noUselessIndex: true }],
 };
 
 export default [
@@ -111,6 +140,14 @@ export default [
       '**/coverage/**',
       'data/**',
     ],
+  },
+
+  {
+    plugins: { prettier },
+    rules: {
+      ...eslintConfigPrettier.rules,
+      'prettier/prettier': 'error',
+    },
   },
 
   // Basis-Kernregeln von ESLint
@@ -133,11 +170,16 @@ export default [
     plugins: {
       '@typescript-eslint': typescriptEslintPlugin,
       sonarjs,
+      import: importPlugin,
+    },
+    settings: {
+      ...importSettings,
     },
     rules: {
       ...commonTypeScriptRules,
       ...typedOnlyRulesOff,
       ...sonarJsRules,
+      ...importRules,
     },
   },
 
@@ -160,11 +202,35 @@ export default [
     plugins: {
       '@typescript-eslint': typescriptEslintPlugin,
       sonarjs,
+      import: importPlugin,
+    },
+    settings: {
+      ...importSettings,
     },
     rules: {
       ...commonTypeScriptRules,
       ...(isTypeAware ? typedOnlyRulesOn : typedOnlyRulesOff),
       ...sonarJsRules,
+      ...importRules,
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              // verbietet ./foo ohne .ts/.tsx/.js/.mjs/.cts/.mts/.json – auch bei `import type`
+              regex: '^\\./(?!.*\\.(ts|tsx|js|mjs|cts|mts|json)$).*$',
+              message:
+                'Relative Imports müssen eine Dateiendung besitzen (.ts/.tsx/.js/.mjs/.cts/.mts/.json).',
+            },
+            {
+              // verbietet ../bar ohne .ts/.tsx/.js/.mjs/.cts/.mts/.json – auch bei `import type`
+              regex: '^\\.\\./(?!.*\\.(ts|tsx|js|mjs|cts|mts|json)$).*$',
+              message:
+                'Relative Imports müssen eine Dateiendung besitzen (.ts/.tsx/.js/.mjs/.cts/.mts/.json).',
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -176,13 +242,6 @@ export default [
           prefer: 'no-type-imports',
         },
       ],
-    },
-  },
-  {
-    plugins: { prettier },
-    rules: {
-      ...eslintConfigPrettier.rules,
-      'prettier/prettier': 'error',
     },
   },
 ];

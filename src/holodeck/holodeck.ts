@@ -118,6 +118,7 @@ export class Holodeck {
    */
   public async start(): Promise<HolodeckStartResult> {
     // TODO: forbidProd-Check einbauen (z. B. NODE_ENV === 'production' verbieten)
+    this.forbidProd;
     await this.adapter.start();
     this.hasStarted = true;
 

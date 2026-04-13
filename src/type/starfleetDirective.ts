@@ -45,6 +45,9 @@ export interface IStarfleetDirectives {
    * **immutable** (schreibgeschützt), um unbeabsichtigte Mutationen in Tests zu verhindern.
    */
   listDirectives(prefix?: string): Readonly<Record<string, unknown>>;
+
+  // TODO Docstring hinzufügen
+  hasProvider(providerName: string): boolean;
 }
 
 /**
@@ -64,3 +67,42 @@ export type StarfleetDirectivesOptions = {
    */
   freeze?: boolean;
 };
+
+/**
+ * Kapselt das Ergebnis des Ladevorgangs von StarfleetDirectives
+ * für ein einzelnes Szenario. Wird typischerweise beim Erzeugen
+ * einer neuen DqatWorld-Instanz verwendet.
+ *
+ * Diese Struktur trennt klar zwischen der schreibgeschützten
+ * Directives-Instanz und dem mutierbaren Memory-Provider, der
+ * Szenario-übergreifend **nicht** geteilt wird.
+ */
+export interface ILoadedStarfleetDirectives {
+  /**
+   * Vollständig aufgebaute StarfleetDirectives-Instanz.
+   *
+   * Sie kombiniert die Werte aller aktiven Provider (JSON, ENV, Memory)
+   * gemäß der Prioritätsregel (preferFirst = true) und stellt Methoden
+   * wie `resolveDirective()`, `hasDirective()` und `listDirectives()` bereit.
+   *
+   * Diese Instanz ist während der Laufzeit **immutable** und wird für alle
+   * Lookup-Operationen innerhalb des Szenarios verwendet.
+   */
+  readonly starfleetDirectives: IStarfleetDirectives;
+
+  /**
+   * Der szenario-lokale Memory-Provider, der in der Provider-Kette
+   * die höchste Priorität besitzt.
+   *
+   * Er dient dazu, Werte während eines Szenarios dynamisch zu setzen
+   * oder zu überschreiben – z. B. wenn ein Step im Testlauf Laufzeitdaten
+   * wie Ports, Tokens oder generierte IDs einträgt.
+   *
+   * Über diesen Provider werden von der DqatWorld-Instanz die Methoden
+   * `setDirectiveOverride()` und verwandte Helfer realisiert.
+   *
+   * Der Memory-Provider ist **mutierbar** und wird nach Abschluss des
+   * Szenarios verworfen.
+   */
+  readonly memoryProvider: IStarfleetDirectiveProvider;
+}

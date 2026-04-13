@@ -70,6 +70,15 @@ export function createStarfleetDirectives(
     names.add(p.name);
   }
 
+  const hasProvider = (providerName: string): boolean => {
+    for (const name of names) {
+      if (name.indexOf(providerName) >= 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // --- Kern-Helfer ---------------------------------------------------------
 
   const findValue = (key: string): unknown | undefined => {
@@ -135,5 +144,5 @@ export function createStarfleetDirectives(
     return deepFreeze(cloneSafe(out));
   };
 
-  return { resolveDirective, hasDirective, listDirectives };
+  return { resolveDirective, hasDirective, listDirectives, hasProvider };
 }

@@ -1,8 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import {
+  DEFAULT_DOUBLE_UNDERSCORE_IS_SEPARATOR,
+  DEFAULT_DROP_UNDEFINED,
+  DEFAULT_ENV_PARSE,
+  DEFAULT_FLATTEN,
+  DEFAULT_INCLUDE_ARRAY_INDICES,
+  DEFAULT_SEPARATOR,
+  DEFAULT_TO_LOWER_CASE,
+} from '../../../../src/config/starfleetDirectives.config.ts';
 import type {
-  EnvProviderOptions,
-  JsonFileProviderOptions,
-  MemoryProviderOptions,
+  IEnvProviderOptions,
+  IJsonFileProviderOptions,
+  IMemoryProviderOptions,
   NormalizedEnvOptions,
   NormalizedJsonFileOptions,
   NormalizedMemoryOptions,
@@ -12,20 +21,11 @@ import {
   normalizeJsonFileOptions,
   normalizeMemoryOptions,
 } from '../../../../src/util/provider/optionNormalization.ts';
-import {
-  DEFAULT_DOUBLE_UNDERSCORE_IS_SEPARATOR,
-  DEFAULT_DROP_UNDEFINED,
-  DEFAULT_ENV_PARSE,
-  DEFAULT_FLATTEN,
-  DEFAULT_INCLUDE_ARRAY_INDICES,
-  DEFAULT_SEPARATOR,
-  DEFAULT_TO_LOWER_CASE,
-} from '../../../../src/util/provider/providerDefaults.ts';
 
 describe('optionNormalization Hilfsfunktionen', () => {
   describe('normalizeEnvOptions', () => {
     const tests: ReadonlyArray<
-      [string, EnvProviderOptions | undefined, NormalizedEnvOptions]
+      [string, IEnvProviderOptions | undefined, NormalizedEnvOptions]
     > = [
       [
         'alle Werte standardmäßig gesetzt werden, wenn kein Input vorhanden ist',
@@ -117,7 +117,7 @@ describe('optionNormalization Hilfsfunktionen', () => {
     it.for(tests)(
       'liefert korrekt normalisierte Optionen, wenn %s',
       ([, input, expected]) => {
-        const result = normalizeEnvOptions(input as EnvProviderOptions);
+        const result = normalizeEnvOptions(input as IEnvProviderOptions);
         expect(result).toEqual(expected);
       },
     );
@@ -125,7 +125,7 @@ describe('optionNormalization Hilfsfunktionen', () => {
 
   describe('normalizeJsonFileOptions', () => {
     const tests: ReadonlyArray<
-      [string, JsonFileProviderOptions | undefined, NormalizedJsonFileOptions]
+      [string, IJsonFileProviderOptions | undefined, NormalizedJsonFileOptions]
     > = [
       [
         'explizite Werte korrekt übernommen werden',
@@ -189,7 +189,7 @@ describe('optionNormalization Hilfsfunktionen', () => {
       'liefert korrekt normalisierte Optionen, wenn %s',
       ([, input, expected]) => {
         const result = normalizeJsonFileOptions(
-          input as JsonFileProviderOptions,
+          input as IJsonFileProviderOptions,
         );
         expect(result).toEqual(expected);
       },
@@ -198,7 +198,7 @@ describe('optionNormalization Hilfsfunktionen', () => {
 
   describe('normalizeMemoryOptions', () => {
     const tests: ReadonlyArray<
-      [string, MemoryProviderOptions | undefined, NormalizedMemoryOptions]
+      [string, IMemoryProviderOptions | undefined, NormalizedMemoryOptions]
     > = [
       [
         'explizite Werte korrekt übernommen werden',
@@ -283,7 +283,7 @@ describe('optionNormalization Hilfsfunktionen', () => {
     it.for(tests)(
       'liefert korrekt normalisierte Optionen, wenn %s',
       ([, input, expected]) => {
-        const result = normalizeMemoryOptions(input as MemoryProviderOptions);
+        const result = normalizeMemoryOptions(input as IMemoryProviderOptions);
         expect(result).toEqual(expected);
       },
     );

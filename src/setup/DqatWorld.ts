@@ -1,10 +1,18 @@
-import type { IWorldOptions } from '@cucumber/cucumber';
 import type { Astrometrics } from '../astrometrics/astrometrics.ts';
+import type {
+  IStarfleetDirectiveSchema,
+  TStarfleetDirectiveKey,
+} from '../config/starfleetDirectives.keys.ts';
+import { MemoryProvider } from '../factory/provider/memoryProvider.ts';
+import type { Holodeck } from '../holodeck/holodeck.ts';
 import type { ICucumberWorld } from '../type/ICucumberWorld.ts';
 import type {
   MissionLogEntry,
   MissionLogLevel,
 } from '../type/astrometrics/missionLog.ts';
+import type { HttpResponseSnapshot } from '../type/httpResponse.ts';
+import type { IStarfleetDirectives } from '../type/starfleetDirective.ts';
+import { loadStarfleetDirectives } from './loadStarfleetDirectives.ts';
 
 /**
  * DQAT-World (Iteration 1 – ohne Astrometrics-Implementierung)
@@ -21,6 +29,8 @@ import type {
  */
 export class DqatWorld implements ICucumberWorld {
   public astrometrics?: Astrometrics;
+  public holodeck?: Holodeck;
+  public lastResponse?: HttpResponseSnapshot;
 
   /**
    * Szenario-lokaler Key-Value-Speicher
@@ -37,7 +47,16 @@ export class DqatWorld implements ICucumberWorld {
    */
   private disposerStack: Array<() => void | Promise<void>> = [];
 
-  constructor(_options: IWorldOptions) {}
+  /**
+   * Schreibgeschützte Directives-Instanz (liefert gefreezte Werte).
+   */
+  private directives?: IStarfleetDirectives;
+
+  /**
+   * Konkreter Memory-Provider (mutierbar, höchste Priorität).
+   * Hinweis: Wir halten die konkrete Klasse, damit `set` verfügbar ist.
+   */
+  private memoryProvider?: MemoryProvider;
 
   /**
    * Liefert die aktuelle Zeit der World.
@@ -126,5 +145,80 @@ export class DqatWorld implements ICucumberWorld {
 
   public getMissionLogBuffer(): MissionLogEntry[] {
     return this.missionLogBuffer;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public getStarfleetDirectives(): IStarfleetDirectives {
+    if (!this.directives) {
+      throw new Error('Keine StarfleetDirectives geladen');
+    }
+    return this.directives;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public getDirective<K extends TStarfleetDirectiveKey>(
+    key: K,
+  ): IStarfleetDirectiveSchema[K] | undefined {
+    if (!this.directives) {
+      throw new Error('Keine StarfleetDirectives geladen');
+    }
+    return this.directives.resolveDirective<IStarfleetDirectiveSchema[K]>(key);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public hasDirective(key: TStarfleetDirectiveKey): boolean {
+    if (!this.directives) {
+      throw new Error('Keine StarfleetDirectives geladen');
+    }
+    return this.directives.hasDirective(key);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public listDirectives(prefix?: string): Readonly<Record<string, unknown>> {
+    if (!this.directives) {
+      throw new Error('Keine StarfleetDirectives geladen');
+    }
+    return this.directives.listDirectives(prefix);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public setDirectiveOverride<K extends TStarfleetDirectiveKey>(
+    key: K,
+    value: IStarfleetDirectiveSchema[K],
+  ): void {
+    // TODO MemoryProvider.set implementieren.
+    this.memoryProvider;
+    throw new Error('Method not implemented yet.');
+  }
+
+  /**
+   * Erstellt eine neue World-Instanz für ein einzelnes Szenario.
+   * Lädt JSON-, ENV- und Memory-Provider gemäß Prioritätsregeln.
+   */
+  public loadStarfleetDirectives(additionalPaths: string[]): void {
+    const { starfleetDirectives, memoryProvider } =
+      loadStarfleetDirectives(additionalPaths);
+
+    // Konkreten Memory-Provider sicherstellen (für set-Operationen)
+    if (!(memoryProvider instanceof MemoryProvider)) {
+      // Falls dein Loader zukünftig ein anderes Konstrukt liefert,
+      // ist dies ein expliziter, frühzeitiger Hinweis.
+      throw new Error(
+        'DqatWorld: Erwarteter MemoryProvider ist keine Instanz von MemoryProvider.',
+      );
+    }
+
+    this.directives = starfleetDirectives;
+    this.memoryProvider = memoryProvider;
   }
 }

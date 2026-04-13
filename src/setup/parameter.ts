@@ -5,6 +5,7 @@ import { defineParameterType } from '@cucumber/cucumber';
  */
 export function registerParameter(): void {
   registerAstrometricsParameter();
+  registerHolodeckParameter();
 }
 
 /**
@@ -17,3 +18,8 @@ export function registerAstrometricsParameter(): void {
     transformer: (s) => s.toString(),
   });
 }
+
+/**
+ * Registriert alle Parameter für Holodeck
+ */
+export function registerHolodeckParameter(): void {}

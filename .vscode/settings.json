@@ -18,6 +18,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
+  // JSON-Validierung
+  "json.schemas": [
+    {
+      "fileMatch": ["**/*.scene.json"],
+      "url": "./src/config/schema/holodeck.scene.v1.json"
+    }
+  ],
+
   // ESLint: Flat Config & validierte Sprachen
   "eslint.enable": true,
   "eslint.useFlatConfig": true,

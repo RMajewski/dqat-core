@@ -52,9 +52,7 @@ jobs:
         shell: bash
         run: |
           git branch -a
-          git rev-parse --verify main
-          git rev-parse --verify beta
-          git rev-parse --verify alpha
+          git tag --list
     
       - name: 🔐 Open Secure Channel (Configure SSH for Deploy-Key)
         run: |

@@ -34,25 +34,27 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
 
-      - name: 🔄 Synchronize branch and tags
+      - name: 🔄 Synchronize main and tags
+        shell: bash
         run: |
+          set -euo pipefail
+      
           git fetch origin main:refs/remotes/origin/main
-          git fetch origin beta:refs/remotes/origin/beta
-          git fetch origin alpha:refs/remotes/origin/alpha
           git fetch --tags --force
       
-          git branch -f main origin/main
-          git branch -f beta origin/beta
-          git branch -f alpha origin/alpha
-      
-          git checkout "${{ github.event.workflow_run.head_branch }}"
+          if [[ "$(git branch --show-current)" == "main" ]]; then
+            git reset --hard origin/main
+          else
+            git branch -f main origin/main
+          fi
 
-      - name: 🔎 Debug git refs
+      - name: 🔎 Debug local refs
+        shell: bash
         run: |
           git branch -a
-          git rev-parse --verify origin/main
-          git rev-parse --verify origin/beta
-          git rev-parse --verify origin/alpha
+          git rev-parse --verify main
+          git rev-parse --verify beta
+          git rev-parse --verify alpha
     
       - name: 🔐 Open Secure Channel (Configure SSH for Deploy-Key)
         run: |

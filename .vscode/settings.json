@@ -1,7 +1,19 @@
 {
+  // Sichtbare Linien im Editor
+  "editor.rulers": [
+    {
+      "column": 80,
+      "color": "#ff990077"
+    },
+    100,
+    {
+      "column": 120,
+      "color": "#f50a0a4b"
+    }
+  ],
+
   // Formatierung & Linting
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll": "never",
     "source.fixAll.eslint": "explicit"
@@ -47,6 +59,8 @@
   // Cucumber-Auto-Complete
   "[feature]": {
     "editor.defaultFormatter": "alexkrechik.cucumberautocomplete",
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
     "editor.tabSize": 2,
     "editor.insertSpaces": true
   },
@@ -60,6 +74,35 @@
   "cucumberautocomplete.stepsInvariants": true,
   "cucumberautocomplete.strictGherkinCompletion": true,
   "cucumberautocomplete.syncfeatures": "test/features/**/*.feature",
+  "cucumberautocomplete.formatConfOverride": {
+    "Feature:": 0,
+    "Funktionalität:": 0,
+    "Fähigkeit:": 0,
+    "Geschäftsbedarf:": 0,
+
+    "Szenario:": 1,
+    "Szenariogrundriss:": 1,
+    "Hintergrund:": 1,
+    "Grundlage:": 1,
+
+    "Beispiele:": 2,
+
+    "Angenommen": 2,
+    "Gegeben sei": 2,
+    "Gegeben seien": 2,
+    "Wenn": 2,
+    "Dann": 2,
+    "Und": 2,
+    "Aber": 2,
+    "*": 2,
+
+    "|": 4,
+    "\"\"\"": 4,
+
+    "#": "relative",
+    "@": "relative"
+  },
+  "cucumberautocomplete.gherkinDefinitionPart": "(Given|When|Then)\\(",
 
   // Todo Tree
   "todo-tree.highlights.defaultHighlight": {
@@ -124,5 +167,19 @@
     "[x]"
   ],
   "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS).*(\\n\\s*//\\s{2,}.*)*",
-  "cSpell.words": ["elif", "github", "janeway", "Starfleet", "Tuvok"]
+  "cSpell.words": [
+    "astrometrics",
+    "Astrometrics",
+    "dqat",
+    "Dqat",
+    "elif",
+    "github",
+    "holodeck",
+    "Holodeck",
+    "janeway",
+    "Logeinträge",
+    "Missionslog",
+    "Starfleet",
+    "Tuvok"
+  ]
 }

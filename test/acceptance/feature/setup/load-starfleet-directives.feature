@@ -1,5 +1,6 @@
 # language: de
 @setup
+@Wip
 Funktionalität: Laden der Starfleet Directives
 
   Ziel:

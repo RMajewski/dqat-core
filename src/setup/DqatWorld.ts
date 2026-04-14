@@ -11,7 +11,7 @@ import type {
   MissionLogLevel,
 } from '../type/astrometrics/missionLog.ts';
 import type { HttpResponseSnapshot } from '../type/httpResponse.ts';
-import type { IStarfleetDirectives } from '../type/starfleetDirective.ts';
+import type { StarfleetDirectives } from '../type/starfleetDirective.ts';
 import { loadStarfleetDirectives } from './loadStarfleetDirectives.ts';
 
 /**
@@ -50,7 +50,7 @@ export class DqatWorld implements ICucumberWorld {
   /**
    * Schreibgeschützte Directives-Instanz (liefert gefreezte Werte).
    */
-  private directives?: IStarfleetDirectives;
+  private directives?: StarfleetDirectives;
 
   /**
    * Konkreter Memory-Provider (mutierbar, höchste Priorität).
@@ -76,7 +76,7 @@ export class DqatWorld implements ICucumberWorld {
   };
 
   /**
-   * Liest einen Wert aus dem szenario-lokalen Store.
+   * Liest einen Wert aus dem Szenario-lokalen Store.
    *
    * @returns T | undefined, wenn Schlüssel nicht gesetzt ist
    */
@@ -85,7 +85,7 @@ export class DqatWorld implements ICucumberWorld {
   }
 
   /**
-   * Schreibt einen Wert in den szenario-lokalen Store (überschreibt vorhandene Werte).
+   * Schreibt einen Wert in den Szenario-lokalen Store (überschreibt vorhandene Werte).
    */
   public set<T = unknown>(key: string, value: T): void {
     this.runtimeStore.set(key, value);
@@ -150,7 +150,7 @@ export class DqatWorld implements ICucumberWorld {
   /**
    * @inheritdoc
    */
-  public getStarfleetDirectives(): IStarfleetDirectives {
+  public getStarfleetDirectives(): StarfleetDirectives {
     if (!this.directives) {
       throw new Error('Keine StarfleetDirectives geladen');
     }
@@ -196,9 +196,11 @@ export class DqatWorld implements ICucumberWorld {
     key: K,
     value: IStarfleetDirectiveSchema[K],
   ): void {
-    // TODO MemoryProvider.set implementieren.
-    this.memoryProvider;
-    throw new Error('Method not implemented yet.');
+    if (!this.memoryProvider) {
+      throw new Error('Es ist kein Memory-Provider initialisiert.');
+    }
+
+    this.memoryProvider.set(key, value);
   }
 
   /**

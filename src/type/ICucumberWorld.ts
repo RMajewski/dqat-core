@@ -5,7 +5,7 @@ import type {
 } from '../config/starfleetDirectives.keys.ts';
 import type { Holodeck } from '../holodeck/holodeck.ts';
 import type { HttpResponseSnapshot } from './httpResponse.ts';
-import type { IStarfleetDirectives } from './starfleetDirective.ts';
+import type { StarfleetDirectives } from './starfleetDirective.ts';
 
 /**
  * Beschreibt die gemeinsame World-Schnittstelle für Szenarien.
@@ -60,7 +60,7 @@ export interface ICucumberWorld {
    * Liefert die schreibgeschützte StarfleetDirectives-Instanz für das Szenario.
    * @returns IStarfleetDirectives
    */
-  getStarfleetDirectives(): IStarfleetDirectives;
+  getStarfleetDirectives(): StarfleetDirectives;
 
   /**
    * Typsicherer Zugriff auf Directives über vordefinierte Schlüssel.

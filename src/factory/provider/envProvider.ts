@@ -2,7 +2,7 @@ import type {
   IEnvProviderOptions,
   NormalizedEnvOptions,
 } from '../../type/provider/providerOptions.ts';
-import type { IStarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
+import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
 import {
   applyStripPrefix,
   mapDoubleUnderscoreToSeparator,
@@ -24,7 +24,7 @@ import {
  * - `get(key)`
  * - `list(prefix?)`
  */
-export class EnvProvider implements IStarfleetDirectiveProvider {
+export class EnvProvider implements StarfleetDirectiveProvider {
   /** Logischer Name des Providers (für Logs/Debugging). */
   public readonly name: string;
 

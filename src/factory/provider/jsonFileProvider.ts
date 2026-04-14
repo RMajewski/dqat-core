@@ -4,7 +4,7 @@ import type {
   IJsonFileProviderOptions,
   NormalizedJsonFileOptions,
 } from '../../type/provider/providerOptions.ts';
-import type { IStarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
+import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
 import { flattenObject } from '../../util/provider/flatten.ts';
 import { isPlainObject } from '../../util/provider/guards.ts';
 import { normalizeJsonFileOptions } from '../../util/provider/optionNormalization.ts';
@@ -17,7 +17,7 @@ import { normalizeJsonFileOptions } from '../../util/provider/optionNormalizatio
  * - `get(key)`
  * - `list(prefix?)`
  */
-export class JsonFileProvider implements IStarfleetDirectiveProvider {
+export class JsonFileProvider implements StarfleetDirectiveProvider {
   public readonly name: string;
 
   private readonly options: NormalizedJsonFileOptions;

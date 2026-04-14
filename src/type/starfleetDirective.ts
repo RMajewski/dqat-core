@@ -3,7 +3,7 @@
  * z.B. In-Memory, Umgebungsvariablen oder JSON-Dateien. Provider dürfen Plattformdetails
  * enthalten, die Kern-Typen bleiben davon unabhängig.
  */
-export interface IStarfleetDirectiveProvider {
+export interface StarfleetDirectiveProvider {
   /**
    * Logischer Name des Providers (z.B. „memory“, „env“, „json“). Hilft beim Debugging
    * und in Log-Ausgaben. Namen sollten innerhalb einer Instanz eindeutig sein.
@@ -28,7 +28,7 @@ export interface IStarfleetDirectiveProvider {
  * Öffentliche API für Tests/Framework-Komponenten, um deterministisch auf
  * Test-Konfigurationen („Directives“) zuzugreifen – unabhängig von der Quelle.
  */
-export interface IStarfleetDirectives {
+export interface StarfleetDirectives {
   /**
    * Exakten Key auflösen; unbekannt → `undefined` (kein Throw).
    * Beispiel: `resolveDirective('frontend.baseUrl')`.
@@ -77,7 +77,7 @@ export type StarfleetDirectivesOptions = {
  * Directives-Instanz und dem mutierbaren Memory-Provider, der
  * Szenario-übergreifend **nicht** geteilt wird.
  */
-export interface ILoadedStarfleetDirectives {
+export interface LoadedStarfleetDirectives {
   /**
    * Vollständig aufgebaute StarfleetDirectives-Instanz.
    *
@@ -88,7 +88,7 @@ export interface ILoadedStarfleetDirectives {
    * Diese Instanz ist während der Laufzeit **immutable** und wird für alle
    * Lookup-Operationen innerhalb des Szenarios verwendet.
    */
-  readonly starfleetDirectives: IStarfleetDirectives;
+  readonly starfleetDirectives: StarfleetDirectives;
 
   /**
    * Der szenario-lokale Memory-Provider, der in der Provider-Kette
@@ -104,5 +104,5 @@ export interface ILoadedStarfleetDirectives {
    * Der Memory-Provider ist **mutierbar** und wird nach Abschluss des
    * Szenarios verworfen.
    */
-  readonly memoryProvider: IStarfleetDirectiveProvider;
+  readonly memoryProvider: StarfleetDirectiveProvider;
 }

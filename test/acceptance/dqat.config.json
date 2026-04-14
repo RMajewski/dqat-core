@@ -1,0 +1,7 @@
+{
+  "envProviderOptions": {
+    "stripPrefix": "DQ_",
+    "toLowerCase": true,
+    "parse": true
+  }
+}

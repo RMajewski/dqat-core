@@ -1,4 +1,12 @@
+import Ajv2020 from 'ajv/dist/2020.js';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { HolodeckSceneLoadError } from '../holodeck/holodeck.error.ts';
+import { Holodeck } from '../holodeck/holodeck.ts';
+import { SceneLoader } from '../holodeck/sceneLoader.ts';
 import type { DqatWorld } from '../setup/DqatWorld.ts';
+import { HolodeckSceneLoadErrorCode } from '../type/holodeck/holodeck.error.ts';
+import type { HolodeckSceneDocument } from '../type/holodeck/sceneDocument.ts';
 
 /**
  * Startet das Holodeck im gewünschten Modus (z. B. "embedded" oder "remote").
@@ -29,40 +37,83 @@ export async function startHolodeckCallback(
   this: DqatWorld,
   mode: 'embedded' | 'remote',
 ): Promise<void> {
-  // TODO:
-  // - Holodeck-Instanz anhand der Konfiguration erstellen
-  //   (host, port, forbidProd, sceneLoader, mode).
-  // - this.holodeck = new Holodeck(config);
-  //
-  // - Holodeck starten:
-  //   const startResult = await this.holodeck.start();
-  //
-  // - Optional: Mission-Log-Eintrag schreiben mit startResult.baseUrl usw.
-  //
-  // Noch keine konkrete Implementierung hier, damit wir später sauber
-  // injizieren können (SceneLoader etc.).
   if (mode !== 'embedded' && mode !== 'remote') {
     throw new Error(
       `Unbekannter Holodeck-Modus "${mode}". Erlaubt sind nur "embedded" und "remote".`,
     );
   }
 
-  /*
+  if (this.holodeck) {
+    await this.holodeck.stop();
+    this.holodeck = undefined;
+  }
+
+  const fixturesDir =
+    this.get<string>('holodeck.fixturesDir') ??
+    path.resolve(process.cwd(), 'test/acceptance/fixtures/holodeck');
+
+  const sceneLoader = new SceneLoader({
+    readSceneDocumentByName: async (
+      sceneName: string,
+    ): Promise<HolodeckSceneDocument> => {
+      const sceneFilePath = path.join(fixturesDir, `${sceneName}.scene.json`);
+
+      let documentText: string;
+      try {
+        documentText = await readFile(sceneFilePath, 'utf8');
+      } catch (error) {
+        const isMissingFile =
+          typeof error === 'object' &&
+          error !== null &&
+          'code' in error &&
+          (error as { code?: string }).code === 'ENOENT';
+
+        if (isMissingFile) {
+          throw new HolodeckSceneLoadError({
+            code: HolodeckSceneLoadErrorCode.UNKNOWN_SCENE,
+            message: `Scene "${sceneName}" not found in ${fixturesDir}`,
+            path: 'scene',
+          });
+        }
+        throw error;
+      }
+
+      try {
+        return JSON.parse(documentText) as HolodeckSceneDocument;
+      } catch {
+        throw new HolodeckSceneLoadError({
+          code: HolodeckSceneLoadErrorCode.SCHEMA_VIOLATION,
+          message: `Scene "${sceneName}" contains invalid JSON`,
+          path: sceneFilePath,
+        });
+      }
+    },
+    nowProvider: () => this.now(),
+    ajvInstance: new Ajv2020({
+      allErrors: true,
+      strict: true,
+      allowUnionTypes: true,
+      coerceTypes: false,
+    }),
+  });
+
   const holodeck = new Holodeck({
     host: 'localhost',
     port: 1080,
     mode,
     forbidProd: true,
-    sceneLoader:
+    sceneLoader,
   });
 
   const startResult = await holodeck.start();
   this.holodeck = holodeck;
+  this.set('baseUrl', startResult.baseUrl);
 
-  if (mode === 'embedded') {
-    this.set('baseUrl', startResult.baseUrl);
-  }
-  */
+  this.log('info', 'holodeck started', {
+    mode,
+    baseUrl: startResult.baseUrl,
+    fixturesDir,
+  });
 }
 
 /**
@@ -91,12 +142,15 @@ export async function loadSceneCallback(
   this: DqatWorld,
   sceneName: string,
 ): Promise<void> {
-  // TODO:
-  // - Safety-Check: if (!this.holodeck) throw new Error("Holodeck ist nicht gestartet.");
-  // - await this.holodeck.loadScene(sceneName, {});
-  //
-  // Kein persistenter Scene-Handle in der World nötig, solange du ihn
-  // nicht für spätere Auswertung brauchst.
+  if (!this.holodeck) {
+    throw new Error(
+      'Das Holodeck ist nicht gestartet. Starte es vor dem Laden einer Szene.',
+    );
+  }
+
+  const sceneHandle = await this.holodeck.loadScene(sceneName, {});
+  this.set('holodeck.sceneHandle', sceneHandle);
+  this.log('info', 'holodeck scene loaded', { sceneName, sceneHandle });
 }
 
 /**

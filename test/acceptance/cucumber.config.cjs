@@ -2,9 +2,8 @@
 module.exports = {
   default: {
     paths: ['test/acceptance/feature/**/*.feature'],
-    import: [
-      'tsx/register',
-      'tsconfig-paths/register',
+    requireModule: ['tsx/cjs', 'tsconfig-paths/register'],
+    require: [
       'test/acceptance/setup.ts',
       'src/step/**/*.ts',
       'test/acceptance/step/**/*.ts',

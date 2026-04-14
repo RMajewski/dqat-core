@@ -60,7 +60,7 @@ export async function fetchRequestCallback(
   if (looksAbsolute) {
     finalUrl = pathOrUrl;
   } else {
-    const baseUrl = this.get('basisUrl') as string;
+    const baseUrl = this.get<string>('baseUrl');
     console.debug('baseUrl', { baseUrl });
     if (!baseUrl) {
       throw new Error(
@@ -71,32 +71,18 @@ export async function fetchRequestCallback(
   }
 
   // Schritt 2: Request senden
-  // TODO: Echte Implementierung mit fetch(finalUrl, { method })
-  // const response = await fetch(finalUrl, { method });
-  // const bodyText = await response.text();
-  //
-  // const headers: Record<string, string> = {};
-  // response.headers.forEach((value, key) => {
-  //   headers[key.toLowerCase()] = value;
-  // });
-  //
-  // const snapshot: HttpResponseSnapshot = {
-  //   status: response.status,
-  //   headers,
-  //   bodyText,
-  // };
-  //
-  // this.lastResponse = snapshot;
+  const response = await fetch(finalUrl, { method });
+  const bodyText = await response.text();
 
-  // Platzhalter, bis die echte HTTP-Logik integriert wird:
+  const headers: Record<string, string> = {};
+  response.headers.forEach((value, key) => {
+    headers[key.toLowerCase()] = value;
+  });
+
   const snapshot: HttpResponseSnapshot = {
-    status: 200,
-    headers: {
-      'content-type': 'application/json',
-      'x-dqat-debug-url': finalUrl,
-      'x-dqat-debug-method': method,
-    },
-    bodyText: '{"ok":true}',
+    status: response.status,
+    headers,
+    bodyText,
   };
 
   this.lastResponse = snapshot;

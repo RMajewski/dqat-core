@@ -40,6 +40,7 @@ describe('HolodeckEmbeddedEngineAdapter', () => {
       serverPort: 1080,
       trace: true,
       verbose: true,
+      jvmOptions: ['-Dmockserver.disableSystemOut=true'],
     });
   });
 

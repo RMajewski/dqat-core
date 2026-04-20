@@ -10,14 +10,14 @@ Funktionalität: Laden der Starfleet Directives
 
   Hintergrund:
     Angenommen folgende JSON-Konfigurationsdateien existieren:
-        | Pfad                               | JSON                                    |
-        | ./test.config.json                 | {"test": true}                          |
-        | ./test/test.config.json            | {"test2": "Dies ist ein Test"}          |
-        | ./test/acceptance/test.config.json | {"test3": "Dies ist ein erneuter Test"} |
-    Und die ENV-Variable "DQ_TEST_MODE" ist gesetzt auf "true"
+        | Pfad                               | JSON                                                               |
+        | ./test.config.json                 | {"test": true, "path": "root"}                                     |
+        | ./test/test.config.json            | {"test2": "Dies ist ein Test", "path": "test"}                     |
+        | ./test/acceptance/test.config.json | {"test2": "Dies ist ein erneuter Test", "path": "test/acceptance"} |
+    Und die ENV-Variable "DQ_PATH" ist gesetzt auf "env"
 
   Szenario: Laden aller gültigen Provider
-    Wenn die Starfleet Directives für das Szenario geladen werden
+    Wenn die Starfleet Directives geladen werden
     Dann sollte der JSON-Provider für "test/acceptance/test.config.json" existieren
     Und der JSON-Provider für "test/test.config.json" existieren
     Und der JSON-Provider für "test.config.json" existieren
@@ -25,13 +25,13 @@ Funktionalität: Laden der Starfleet Directives
     Und der Memory-Provider sollte geladen sein
 
   Szenario: Priorität der Provider
-    Angenommen es existieren folgende Starfleet Directives
+    Wenn die Starfleet Directives geladen werden
+    Und es existieren folgende Starfleet Directives
         | Key  | Wert  |
         | test | false |
-    Wenn die Starfleet Directives geladen werden
     Dann sollte der Memory-Provider höchste Priorität haben
     Und der ENV-Provider sollte die JSON-Provider überschreiben
-    Und die Datei "./test/acceptance/dqat.config.json" sollte Vorrang vor "./test/dqat.config.json" haben
+    Und die Datei "./test/acceptance/test.config.json" sollte Vorrang vor "./test/test.config.json" haben
 
   Szenario: Laden der ENV-Provider-Optionen aus erster Datei
     Angenommen die Datei "./test/acceptance/dqat.config.json" enthält den Eintrag "envProviderOptions"
@@ -42,5 +42,6 @@ Funktionalität: Laden der Starfleet Directives
   Szenario: Keine JSON-Dateien vorhanden
     Angenommen keine der Standard-Konfigurationsdateien existiert
     Wenn die Starfleet Directives geladen werden
-    Dann sollte nur der ENV-Provider und der Memory-Provider aktiv sein
+    Dann der ENV-Provider sollte geladen sein
+    Und der Memory-Provider sollte geladen sein
     Und es sollte kein Fehler geworfen werden

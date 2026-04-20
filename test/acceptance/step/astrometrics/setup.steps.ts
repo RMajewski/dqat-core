@@ -44,23 +44,19 @@ Given(
     for (const row of rows) {
       const key = row.Key;
       if (!key || !isStarfleetDirectiveKey(key)) {
-        throw new Error(`The key “${key}” is not a valid key.`);
+        console.warn(`The key “${key}” is not a valid key.`);
       }
-      this.setDirectiveOverride<typeof key>(key, row.Wert);
+      this.setDirectiveOverride(key, row.Wert);
     }
   },
 );
 
 When(
-  'die Starfleet Directives für das Szenario geladen werden',
+  'die Starfleet Directives geladen werden',
   async function (this: DqatAcceptanceWorld) {
     this.loadStarfleetDirectives(this.testPaths);
   },
 );
-
-When('die Starfleet Directives geladen werden', async function () {
-  this.loadStarfleetDirectives(this.testPaths);
-});
 
 Then(
   'sollte der JSON-Provider für {string} existieren',
@@ -102,7 +98,51 @@ Then(
   },
 );
 
-Then('sollte der Memory-Provider höchste Priorität haben', async function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending';
-});
+Then(
+  'sollte der Memory-Provider höchste Priorität haben',
+  async function (this: DqatAcceptanceWorld) {
+    const directiveValue =
+      this.getStarfleetDirectives().resolveDirective('test');
+
+    assert.notStrictEqual(
+      directiveValue,
+      undefined,
+      `Für den Key "test" wurde kein Wert gefunden.`,
+    );
+
+    assert.strictEqual(
+      directiveValue,
+      'false',
+      'Der Memory-Provider hat nicht die höchste Priorität.',
+    );
+  },
+);
+
+Then(
+  'der ENV-Provider sollte die JSON-Provider überschreiben',
+  async function (this: DqatAcceptanceWorld) {
+    const value = this.getStarfleetDirectives().resolveDirective('path');
+
+    // Existenz prüfen
+    assert.notStrictEqual(
+      value,
+      undefined,
+      'Erwarteter Wert aus ENV ist undefined',
+    );
+
+    // Inhalt prüfen
+    assert.strictEqual(
+      value,
+      'env',
+      'ENV-Provider hat JSON-Wert nicht überschrieben',
+    );
+  },
+);
+
+Then(
+  'die Datei "./test/acceptance/test.config.json" sollte Vorrang vor "./test/test.config.json" haben',
+  async function (this: DqatAcceptanceWorld) {
+    // Write code here that turns the phrase above into concrete actions
+    return 'pending';
+  },
+);

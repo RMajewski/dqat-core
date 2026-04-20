@@ -49,7 +49,6 @@ export function loadStarfleetDirectives(
     ...additionalPaths,
   ];
   for (const relativePath of paths) {
-    console.debug(`read the "${relativePath} config file`);
     const absolutePath = resolve(process.cwd(), relativePath);
     if (!existsSync(absolutePath)) {
       continue;
@@ -62,12 +61,9 @@ export function loadStarfleetDirectives(
     jsonProviders.push(jsonFileProvider);
 
     if (envProviderOptionsFromConfig === undefined) {
-      // TODO Zusammenstellen der Env-Provider-Einstellungen aus Dot-Keys
       const maybeEnvOptions = extractEnvProviderOptionsFromFlatRecord(
         jsonFileProvider.list(StarfleetDirectiveKey.envProviderOptions),
       );
-
-      console.debug('env configuration', { maybeEnvOptions });
 
       if (maybeEnvOptions && typeof maybeEnvOptions === 'object') {
         envProviderOptionsFromConfig = maybeEnvOptions;

@@ -29,16 +29,27 @@ Funktionalität: Laden der Starfleet Directives
     Und es existieren folgende Starfleet Directives
         | Key  | Wert  |
         | test | false |
-    Dann sollte der Memory-Provider höchste Priorität haben
-    Und der ENV-Provider sollte die JSON-Provider überschreiben
-    Und die Datei "./test/acceptance/test.config.json" sollte Vorrang vor "./test/test.config.json" haben
+    Dann sollte der Starfleet Directive Key "test" den Wert "false" haben
+    Dann sollte der Starfleet Directive Key "test2" den Wert "Dies ist ein Test" haben
+    Dann sollte der Starfleet Directive Key "path" den Wert "env" haben
 
   Szenario: Laden der ENV-Provider-Optionen aus erster Datei
-    Angenommen die Datei "./test/acceptance/dqat.config.json" enthält den Eintrag "envProviderOptions"
+    # Angenommen die Datei "./test/acceptance/providerOptions.config.json" enthält die Provider-Optionen
+    #     | Property                    | Wert  |
+    #     | stripPrefix                 | TEST_ |
+    #     | toLowerCase                 | true  |
+    #     | parse                       | true  |
+    #     | defaultSeparator            | ;     |
+    #     | doubleUnderscoreIsSeparator | false |
+    #     | dropUndefined               | false |
     Wenn die Starfleet Directives geladen werden
-    Dann sollten die ENV-Provider-Optionen aus dieser Datei übernommen werden
-    Und keine späteren Dateien dürfen diese überschreiben
+    Dann sollten die ENV-Provider-Optionen so eingestellt sein
+        | Property    | Wert |
+        | stripPrefix | DQ_  |
+        | toLowerCase | true |
+        | parse       | true |
 
+  @SkipOnPipeline
   Szenario: Keine JSON-Dateien vorhanden
     Angenommen keine der Standard-Konfigurationsdateien existiert
     Wenn die Starfleet Directives geladen werden

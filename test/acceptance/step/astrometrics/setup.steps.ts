@@ -24,6 +24,30 @@ Given(
 );
 
 Given(
+  'die Datei {string} enthält die Provider-Optionen',
+  async function (
+    this: DqatAcceptanceWorld,
+    filePath: string,
+    dataTable: DataTable,
+  ) {
+    const providerOptions: Record<string, unknown> = {};
+    const rows = dataTable.hashes();
+
+    for (const row of rows) {
+      if (row.Property) {
+        providerOptions[row.Property] = row.Wert;
+      }
+    }
+
+    this.testPaths.push(
+      makeJsonFile(filePath, 'dqat-provider-options', {
+        envProviderOptions: providerOptions,
+      }),
+    );
+  },
+);
+
+Given(
   'die ENV-Variable {string} ist gesetzt auf {string}',
   async function (
     this: DqatAcceptanceWorld,
@@ -46,7 +70,9 @@ Given(
       if (!key || !isStarfleetDirectiveKey(key)) {
         console.warn(`The key “${key}” is not a valid key.`);
       }
-      this.setDirectiveOverride(key, row.Wert);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.setDirectiveOverride(key as any, row.Wert);
     }
   },
 );
@@ -99,50 +125,34 @@ Then(
 );
 
 Then(
-  'sollte der Memory-Provider höchste Priorität haben',
-  async function (this: DqatAcceptanceWorld) {
-    const directiveValue =
-      this.getStarfleetDirectives().resolveDirective('test');
+  'sollten die ENV-Provider-Optionen so eingestellt sein',
+  async function (this: DqatAcceptanceWorld, dataTable: DataTable) {
+    const rows = dataTable.hashes();
+    const envProviderOptions = this.getEnvProviderOptions();
 
-    assert.notStrictEqual(
-      directiveValue,
-      undefined,
-      `Für den Key "test" wurde kein Wert gefunden.`,
+    assert.ok(
+      envProviderOptions,
+      'Die envProviderOptions sind nicht gesetzt oder konnten nicht geladen werden.',
     );
 
-    assert.strictEqual(
-      directiveValue,
-      'false',
-      'Der Memory-Provider hat nicht die höchste Priorität.',
-    );
-  },
-);
+    for (const row of rows) {
+      const key = row.Property;
+      const hasProperty = Object.hasOwn(envProviderOptions, key);
 
-Then(
-  'der ENV-Provider sollte die JSON-Provider überschreiben',
-  async function (this: DqatAcceptanceWorld) {
-    const value = this.getStarfleetDirectives().resolveDirective('path');
+      assert.ok(
+        hasProperty,
+        `In envProviderOptions ist der Key "${key}" nicht gesetzt.`,
+      );
 
-    // Existenz prüfen
-    assert.notStrictEqual(
-      value,
-      undefined,
-      'Erwarteter Wert aus ENV ist undefined',
-    );
+      const actualValue =
+        envProviderOptions[key as keyof typeof envProviderOptions]?.toString();
+      const expectedValue = row.Wert;
 
-    // Inhalt prüfen
-    assert.strictEqual(
-      value,
-      'env',
-      'ENV-Provider hat JSON-Wert nicht überschrieben',
-    );
-  },
-);
-
-Then(
-  'die Datei "./test/acceptance/test.config.json" sollte Vorrang vor "./test/test.config.json" haben',
-  async function (this: DqatAcceptanceWorld) {
-    // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+      assert.equal(
+        actualValue,
+        expectedValue,
+        `Der Wert der Option "${key}" ist falsch gesetzt`,
+      );
+    }
   },
 );

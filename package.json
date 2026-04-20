@@ -41,6 +41,7 @@
     "test:acceptance:wip": "npm run test:acceptance -- --tags \"@Wip\"",
     "test:acceptance:dry": "cucumber-js --config test/acceptance/cucumber.config.cjs --dry-run",
     "test:acceptance:report": "cucumber-js --config test/acceptance/cucumber.config.cjs --format html:test/reports/cucumber/index.html",
+    "test:acceptance:ci": "npm run test:acceptance -- -p ci",
     "typecheck:test": "tsc -p tsconfig.test.json --noEmit"
   },
   "publishConfig": {

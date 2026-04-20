@@ -72,9 +72,12 @@ export function loadStarfleetDirectives(
   }
 
   const environmentMap: Record<string, string | undefined> = { ...process.env };
+  const envProviderOptions: IEnvProviderOptions = {
+    ...(envProviderOptionsFromConfig ?? {}),
+  };
   const envProvider = new EnvProvider(environmentMap, {
     name: 'env',
-    ...(envProviderOptionsFromConfig ?? {}),
+    ...envProviderOptions,
   });
 
   const memoryProvider = new MemoryProvider({}, { name: 'memory' });
@@ -94,6 +97,7 @@ export function loadStarfleetDirectives(
   return {
     starfleetDirectives,
     memoryProvider,
+    envProviderOptions,
   };
 }
 

@@ -1,3 +1,5 @@
+import type { IEnvProviderOptions } from './provider/providerOptions.ts';
+
 /**
  * Ein Provider liefert Starfleet-Directives (Test-Konfigurationen) aus einer konkreten Quelle,
  * z.B. In-Memory, Umgebungsvariablen oder JSON-Dateien. Provider dürfen Plattformdetails
@@ -105,4 +107,18 @@ export interface LoadedStarfleetDirectives {
    * Szenarios verworfen.
    */
   readonly memoryProvider: StarfleetDirectiveProvider;
+
+  /**
+   * Effektiv verwendete Optionen für den Env-Provider.
+   *
+   * Diese Werte entsprechen den final aufgelösten Einstellungen, mit denen
+   * ENV-Variablen in Directive-Keys überführt wurden. Enthalten sind also
+   * nicht nur explizit gesetzte Konfigurationswerte, sondern auch übernommene
+   * Defaults, sofern die Ladefunktion diese bereits normalisiert.
+   *
+   * Das Feld ist primär für Tests, Debugging und transparente Nachvollziehbarkeit
+   * gedacht, damit geprüft werden kann, ob die erwartete ENV-Konfiguration
+   * tatsächlich aktiv ist.
+   */
+  readonly envProviderOptions: IEnvProviderOptions;
 }

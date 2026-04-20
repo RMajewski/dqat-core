@@ -11,6 +11,7 @@ import type {
   MissionLogLevel,
 } from '../type/astrometrics/missionLog.ts';
 import type { HttpResponseSnapshot } from '../type/httpResponse.ts';
+import type { IEnvProviderOptions } from '../type/provider/providerOptions.ts';
 import type { StarfleetDirectives } from '../type/starfleetDirective.ts';
 import { loadStarfleetDirectives } from './loadStarfleetDirectives.ts';
 
@@ -57,6 +58,19 @@ export class DqatWorld implements ICucumberWorld {
    * Hinweis: Wir halten die konkrete Klasse, damit `set` verfügbar ist.
    */
   private memoryProvider?: MemoryProvider;
+
+  /**
+   * Effektiv verwendete Optionen für den Env-Provider innerhalb dieses Szenarios.
+   *
+   * Dieses Feld wird beim Initialisieren der DqatWorld aus dem Ergebnis von
+   * `loadStarfleetDirectives` übernommen und repräsentiert die final aufgelösten
+   * ENV-Provider-Einstellungen (inkl. Defaults und Normalisierung).
+   *
+   * Es dient ausschließlich der internen Verwendung innerhalb der World und
+   * wird nicht direkt nach außen exponiert, um unbeabsichtigte Mutationen zu
+   * verhindern.
+   */
+  private envProviderOptions?: IEnvProviderOptions;
 
   /**
    * Liefert die aktuelle Zeit der World.
@@ -208,7 +222,7 @@ export class DqatWorld implements ICucumberWorld {
    * Lädt JSON-, ENV- und Memory-Provider gemäß Prioritätsregeln.
    */
   public loadStarfleetDirectives(additionalPaths: string[]): void {
-    const { starfleetDirectives, memoryProvider } =
+    const { starfleetDirectives, memoryProvider, envProviderOptions } =
       loadStarfleetDirectives(additionalPaths);
 
     // Konkreten Memory-Provider sicherstellen (für set-Operationen)
@@ -222,5 +236,23 @@ export class DqatWorld implements ICucumberWorld {
 
     this.directives = starfleetDirectives;
     this.memoryProvider = memoryProvider;
+    this.envProviderOptions = envProviderOptions;
+  }
+
+  /**
+   * Liefert die effektiv verwendeten Optionen des Env-Providers.
+   *
+   * Diese Methode stellt die während des Ladevorgangs ermittelten und
+   * normalisierten ENV-Provider-Optionen zur Verfügung. Sie eignet sich
+   * insbesondere für Debugging-Zwecke sowie für Akzeptanztests, die prüfen,
+   * ob Konfigurationswerte korrekt übernommen wurden.
+   *
+   * Die zurückgegebenen Optionen sind schreibgeschützt und entsprechen dem
+   * Zustand zum Zeitpunkt der Initialisierung der DqatWorld.
+   *
+   * @returns Die final aufgelösten ENV-Provider-Optionen dieses Szenarios.
+   */
+  public getEnvProviderOptions(): IEnvProviderOptions | undefined {
+    return this.envProviderOptions;
   }
 }

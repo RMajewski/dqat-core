@@ -8,7 +8,7 @@
     "email": "rene.majewski@gmx.de",
     "url": "https://www.rene-majewski.de"
   },
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22.18 <24",
     "pnpm": ">=10 <11"

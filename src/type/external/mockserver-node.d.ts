@@ -102,7 +102,7 @@ declare module 'mockserver-node' {
      * Beispiel laut Doku:
      * "-Dmockserver.enableCORSForAllResponses=true"
      */
-    jvmOptions?: string;
+    jvmOptions?: string[];
 
     /**
      * Anzahl der Startup-Retry-Schleifen, um zu prüfen,

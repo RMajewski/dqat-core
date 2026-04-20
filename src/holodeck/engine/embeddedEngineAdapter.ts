@@ -12,8 +12,12 @@ export class HolodeckEmbeddedEngineAdapter extends HolodeckEngineAdapterBase {
   public async start(): Promise<void> {
     await mockserver.start_mockserver({
       serverPort: this.port,
+      // TODO Zur Konfiguration hinzufügen
       verbose: true,
+      // TODO Zur Konfiguration hinzufügen
       trace: true,
+      // TODO Zur Konfiguration hinzufügen
+      jvmOptions: ['-Dmockserver.disableSystemOut=true'],
     });
   }
 

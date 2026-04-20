@@ -129,4 +129,23 @@ export abstract class HolodeckEngineAdapterBase {
       totalRequests: routes.length,
     };
   }
+
+  /**
+   * Liefert die aktuell vom MockServer aufgezeichneten Log-Nachrichten.
+   *
+   * Die zurückgegebenen Logs enthalten interne Debug-Informationen des
+   * MockServers, wie z. B. Matching-Entscheidungen, eingehende Requests
+   * sowie generierte Responses – abhängig vom konfigurierten Log-Level.
+   *
+   * Die Methode greift ausschließlich lesend auf die Logs zu und verändert
+   * den Zustand des MockServers nicht. Insbesondere werden die Logs nicht
+   * automatisch geleert.
+   *
+   * Typischer Anwendungsfall ist das Schreiben der Logs in eine Report-Datei
+   * (z. B. pro Szenario), um die Konsolenausgabe sauber zu halten und dennoch
+   * vollständige Debug-Informationen verfügbar zu haben.
+   */
+  public async retrieveLogMessages(): Promise<string[]> {
+    return await this.client.retrieveLogMessages({});
+  }
 }

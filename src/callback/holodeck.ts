@@ -7,6 +7,7 @@ import { SceneLoader } from '../holodeck/sceneLoader.ts';
 import type { DqatWorld } from '../setup/DqatWorld.ts';
 import { HolodeckSceneLoadErrorCode } from '../type/holodeck/holodeck.error.ts';
 import type { HolodeckSceneDocument } from '../type/holodeck/sceneDocument.ts';
+import { shutdownHolodeckWithLogs } from '../util/holodeck/shutdown.ts';
 
 /**
  * Startet das Holodeck im gewünschten Modus (z. B. "embedded" oder "remote").
@@ -176,12 +177,7 @@ export async function loadSceneCallback(
  * @param this DqatWorld – Gemeinsamer Szenario-Kontext.
  */
 export async function stopHolodeckCallback(this: DqatWorld): Promise<void> {
-  if (!this.holodeck) {
-    return;
-  }
-
-  await this.holodeck.stop();
-  this.holodeck = undefined;
+  await shutdownHolodeckWithLogs(this);
 }
 
 /**

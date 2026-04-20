@@ -22,6 +22,9 @@ export function beforeScenarioGeneral(): void {
 
     this.set('run.id', runId);
     this.set('scenario.id', scenarioId);
+    this.set('scenario.cucumberScenarioId', scenario.pickle.id);
+    this.set('scenario.name', scenario.pickle.name);
+    this.set('scenario.language', scenario.pickle.language);
     this.set('effectiveDirectives', effectiveDirectives);
     this.set('tags', tagNames);
 

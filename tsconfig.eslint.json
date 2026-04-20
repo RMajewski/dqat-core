@@ -2,7 +2,6 @@
   "extends": "./tsconfig.framework.json",
   "compilerOptions": {
     "noEmit": true,
-    "baseUrl": ".",
     "rootDir": "."
   },
   "include": [

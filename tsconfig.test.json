@@ -5,6 +5,6 @@
     "types": ["vitest", "vitest/importMeta", "node"],
     "rootDir": "."
   },
-  "include": ["test/**/*.ts"],
+  "include": ["test/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["dist", "node_modules"]
 }

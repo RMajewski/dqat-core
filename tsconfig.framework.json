@@ -2,10 +2,9 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "rootDir": "src",
-    "baseUrl": ".",
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
@@ -22,10 +21,10 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "paths": {
-      "@RMajewski/dqat-core": ["src/index.ts"],
-      "@RMajewski/dqat-core/*": ["src/*"],
-      "#callback": ["src/callback/index.ts"],
-      "#setup": ["src/setup/index.ts"]
+      "@RMajewski/dqat-core": ["./src/index.ts"],
+      "@RMajewski/dqat-core/*": ["./src/*"],
+      "#callback": ["./src/callback/index.ts"],
+      "#setup": ["./src/setup/index.ts"]
     }
   },
   "include": ["src"],

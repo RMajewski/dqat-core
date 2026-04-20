@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022"],
+    "types": ["node"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "rootDir": "src",
@@ -24,7 +25,8 @@
       "@RMajewski/dqat-core": ["./src/index.ts"],
       "@RMajewski/dqat-core/*": ["./src/*"],
       "#callback": ["./src/callback/index.ts"],
-      "#setup": ["./src/setup/index.ts"]
+      "#setup": ["./src/setup/index.ts"],
+      "#util": ["./src/util/index.ts"]
     }
   },
   "include": ["src"],

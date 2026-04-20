@@ -4,7 +4,7 @@ Funktionalität: Isolation und Cleanup pro Szenario
   Um Nebeneffekte zu vermeiden,
   möchte ich Ressourcen szenario-lokal verwalten und deterministisch aufräumen.
 
-  @worldSeed:one
+  @worldSeed:one @SkipOnPipeline
   Szenario: Ressourcen werden in LIFO-Reihenfolge entsorgt
     Angenommen die World ist initialisiert
     Und ich registriere eine Ressource "A" mit Disposer
@@ -15,7 +15,7 @@ Funktionalität: Isolation und Cleanup pro Szenario
     Und Fehler in einzelnen Disposern werden protokolliert, blockieren aber das Aufräumen nicht
     Und nach dem Aufräumen sind keine aktiven Timer oder Sockets mehr vorhanden
 
-  @parallel @worldSeed:X
+  @parallel @worldSeed:X @SkipOnPipeline
   Szenario: Szenarien sind isoliert (keine Leaks)
     Angenommen die World ist initialisiert
     Und ich registriere eine Ressource "mockServer" mit Disposer

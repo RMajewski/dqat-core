@@ -1,5 +1,5 @@
 import type {
-  EnvProviderOptions,
+  IEnvProviderOptions,
   NormalizedEnvOptions,
 } from '../../type/provider/providerOptions.ts';
 import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
@@ -38,7 +38,7 @@ export class EnvProvider implements StarfleetDirectiveProvider {
    */
   public constructor(
     env: Record<string, string | undefined>,
-    inputOptions?: EnvProviderOptions,
+    inputOptions?: IEnvProviderOptions,
   ) {
     this.options = normalizeEnvOptions(inputOptions ?? {});
     this.name = this.options.name ?? 'env';

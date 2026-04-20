@@ -1,14 +1,3 @@
-// src/util/provider/optionNormalization.ts
-
-import type {
-  EnvProviderOptions,
-  JsonFileProviderOptions,
-  MemoryProviderOptions,
-  NormalizedEnvOptions,
-  NormalizedJsonFileOptions,
-  NormalizedMemoryOptions,
-} from '../../type/provider/providerOptions.ts';
-import { normalizeParse } from './parsing.ts';
 import {
   DEFAULT_DOUBLE_UNDERSCORE_IS_SEPARATOR,
   DEFAULT_DROP_UNDEFINED,
@@ -17,7 +6,16 @@ import {
   DEFAULT_INCLUDE_ARRAY_INDICES,
   DEFAULT_SEPARATOR,
   DEFAULT_TO_LOWER_CASE,
-} from './providerDefaults.ts';
+} from '../../config/starfleetDirectives.config.ts';
+import type {
+  IEnvProviderOptions,
+  IJsonFileProviderOptions,
+  IMemoryProviderOptions,
+  NormalizedEnvOptions,
+  NormalizedJsonFileOptions,
+  NormalizedMemoryOptions,
+} from '../../type/provider/providerOptions.ts';
+import { normalizeParse } from './parsing.ts';
 
 /**
  * Normalisiert Optionen für den Env-Provider.
@@ -32,7 +30,7 @@ import {
  * Lässt `name` und `stripPrefix` optional.
  */
 export function normalizeEnvOptions(
-  input: EnvProviderOptions,
+  input: IEnvProviderOptions,
 ): NormalizedEnvOptions {
   const {
     name,
@@ -60,7 +58,7 @@ export function normalizeEnvOptions(
  * Setzt ausschließlich den Separator-Default; `name` bleibt optional.
  */
 export function normalizeJsonFileOptions(
-  input: JsonFileProviderOptions,
+  input: IJsonFileProviderOptions,
 ): NormalizedJsonFileOptions {
   const { name, separator = DEFAULT_SEPARATOR } = input ?? {};
   return { name, separator };
@@ -73,7 +71,7 @@ export function normalizeJsonFileOptions(
  * `name` bleibt optional.
  */
 export function normalizeMemoryOptions(
-  input: MemoryProviderOptions,
+  input: IMemoryProviderOptions,
 ): NormalizedMemoryOptions {
   const {
     name,

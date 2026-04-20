@@ -1,3 +1,5 @@
+import type { IEnvProviderOptions } from './provider/providerOptions.ts';
+
 /**
  * Ein Provider liefert Starfleet-Directives (Test-Konfigurationen) aus einer konkreten Quelle,
  * z.B. In-Memory, Umgebungsvariablen oder JSON-Dateien. Provider dürfen Plattformdetails
@@ -45,6 +47,9 @@ export interface StarfleetDirectives {
    * **immutable** (schreibgeschützt), um unbeabsichtigte Mutationen in Tests zu verhindern.
    */
   listDirectives(prefix?: string): Readonly<Record<string, unknown>>;
+
+  // TODO Docstring hinzufügen
+  hasProvider(providerName: string): boolean;
 }
 
 /**
@@ -64,3 +69,56 @@ export type StarfleetDirectivesOptions = {
    */
   freeze?: boolean;
 };
+
+/**
+ * Kapselt das Ergebnis des Ladevorgangs von StarfleetDirectives
+ * für ein einzelnes Szenario. Wird typischerweise beim Erzeugen
+ * einer neuen DqatWorld-Instanz verwendet.
+ *
+ * Diese Struktur trennt klar zwischen der schreibgeschützten
+ * Directives-Instanz und dem mutierbaren Memory-Provider, der
+ * Szenario-übergreifend **nicht** geteilt wird.
+ */
+export interface LoadedStarfleetDirectives {
+  /**
+   * Vollständig aufgebaute StarfleetDirectives-Instanz.
+   *
+   * Sie kombiniert die Werte aller aktiven Provider (JSON, ENV, Memory)
+   * gemäß der Prioritätsregel (preferFirst = true) und stellt Methoden
+   * wie `resolveDirective()`, `hasDirective()` und `listDirectives()` bereit.
+   *
+   * Diese Instanz ist während der Laufzeit **immutable** und wird für alle
+   * Lookup-Operationen innerhalb des Szenarios verwendet.
+   */
+  readonly starfleetDirectives: StarfleetDirectives;
+
+  /**
+   * Der szenario-lokale Memory-Provider, der in der Provider-Kette
+   * die höchste Priorität besitzt.
+   *
+   * Er dient dazu, Werte während eines Szenarios dynamisch zu setzen
+   * oder zu überschreiben – z. B. wenn ein Step im Testlauf Laufzeitdaten
+   * wie Ports, Tokens oder generierte IDs einträgt.
+   *
+   * Über diesen Provider werden von der DqatWorld-Instanz die Methoden
+   * `setDirectiveOverride()` und verwandte Helfer realisiert.
+   *
+   * Der Memory-Provider ist **mutierbar** und wird nach Abschluss des
+   * Szenarios verworfen.
+   */
+  readonly memoryProvider: StarfleetDirectiveProvider;
+
+  /**
+   * Effektiv verwendete Optionen für den Env-Provider.
+   *
+   * Diese Werte entsprechen den final aufgelösten Einstellungen, mit denen
+   * ENV-Variablen in Directive-Keys überführt wurden. Enthalten sind also
+   * nicht nur explizit gesetzte Konfigurationswerte, sondern auch übernommene
+   * Defaults, sofern die Ladefunktion diese bereits normalisiert.
+   *
+   * Das Feld ist primär für Tests, Debugging und transparente Nachvollziehbarkeit
+   * gedacht, damit geprüft werden kann, ob die erwartete ENV-Konfiguration
+   * tatsächlich aktiv ist.
+   */
+  readonly envProviderOptions: IEnvProviderOptions;
+}

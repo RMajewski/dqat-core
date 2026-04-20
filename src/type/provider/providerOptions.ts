@@ -5,7 +5,7 @@
  * - `separator` ist rein konventionell (Standard: ".") und wird nicht über den Typ erzwungen.
  * - `name` dient der Protokollierung / Diagnose und hat keine funktionale Bedeutung.
  */
-export interface BaseProviderOptions {
+export interface IBaseProviderOptions {
   /**
    * Logischer Name des Providers (für Logs / Diagnose).
    * Beispiel: "env", "jsonFile", "memory"
@@ -25,7 +25,7 @@ export interface BaseProviderOptions {
  * - false => keine Konvertierung, alles bleibt String
  * - Objekt => gezielte Aktivierung einzelner Konvertierungen
  */
-export type EnvParseOptions =
+export type IEnvParseOptions =
   | boolean
   | {
       /** Zahlen erkennen (z. B. "42" → 42) */
@@ -44,7 +44,7 @@ export type EnvParseOptions =
  *   Falls noch `includeUndefined` im Code existiert, sollte dies in der Factory
  *   auf `dropUndefined` (invertiert) gemappt werden.
  */
-export interface EnvProviderOptions extends BaseProviderOptions {
+export interface IEnvProviderOptions extends IBaseProviderOptions {
   /**
    * Optionales Präfix, das vor dem Lookup aus ENV-Variablen entfernt wird.
    * Beispiel: "DQ_" → "DQ_APP_PORT" wird zu "APP_PORT".
@@ -76,7 +76,7 @@ export interface EnvProviderOptions extends BaseProviderOptions {
    * - false => keine Konvertierung
    * - Objekt => gezielte Aktivierung einzelner Konvertierungen
    */
-  parse?: EnvParseOptions;
+  parse?: IEnvParseOptions;
 
   /**
    * Einheitliches Undefined-Handling:
@@ -93,14 +93,14 @@ export interface EnvProviderOptions extends BaseProviderOptions {
  * Aktuell gibt es keine zusätzlichen Felder gegenüber dem Basistyp.
  * Diese Schnittstelle existiert bewusst, um zukünftige Felder klar trennen zu können.
  */
-export interface JsonFileProviderOptions extends BaseProviderOptions {
+export interface IJsonFileProviderOptions extends IBaseProviderOptions {
   // (derzeit keine zusätzlichen Felder)
 }
 
 /**
  * Optionen speziell für den In-Memory-Provider.
  */
-export interface MemoryProviderOptions extends BaseProviderOptions {
+export interface IMemoryProviderOptions extends IBaseProviderOptions {
   /**
    * Steuert, ob Eingabestrukturen vor der Schlüsselauflösung flachgeklopft werden.
    * - true  => verschachtelte Objekte werden zu Dot-Keys
@@ -128,9 +128,9 @@ export interface MemoryProviderOptions extends BaseProviderOptions {
  * ohne providerspezifische Felder direkt zu benutzen.
  */
 export type AnyProviderOptions =
-  | EnvProviderOptions
-  | JsonFileProviderOptions
-  | MemoryProviderOptions;
+  | IEnvProviderOptions
+  | IJsonFileProviderOptions
+  | IMemoryProviderOptions;
 
 /**
  * Utility: Markiert nur ausgewählte Keys als required (mit NonNullable),
@@ -146,7 +146,7 @@ type WithRequired<T, K extends keyof T> = Omit<T, K> & {
  * - Alle übrigen bleiben optional.
  */
 export type NormalizedEnvOptions = WithRequired<
-  EnvProviderOptions,
+  IEnvProviderOptions,
   | 'separator'
   | 'doubleUnderscoreIsSeparator'
   | 'toLowerCase'
@@ -160,7 +160,7 @@ export type NormalizedEnvOptions = WithRequired<
  * - Alle übrigen bleiben optional.
  */
 export type NormalizedJsonFileOptions = WithRequired<
-  JsonFileProviderOptions,
+  IJsonFileProviderOptions,
   'separator'
 >;
 
@@ -170,6 +170,6 @@ export type NormalizedJsonFileOptions = WithRequired<
  * - Alle übrigen bleiben optional.
  */
 export type NormalizedMemoryOptions = WithRequired<
-  MemoryProviderOptions,
+  IMemoryProviderOptions,
   'separator' | 'flatten' | 'includeArrayIndices' | 'dropUndefined'
 >;

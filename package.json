@@ -8,9 +8,10 @@
     "email": "rene.majewski@gmx.de",
     "url": "https://www.rene-majewski.de"
   },
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": "^22.18.0"
+    "node": ">=22.18 <24",
+    "pnpm": ">=10 <11"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "test:acceptance:wip": "npm run test:acceptance -- --tags \"@Wip\"",
     "test:acceptance:dry": "cucumber-js --config test/acceptance/cucumber.config.cjs --dry-run",
     "test:acceptance:report": "cucumber-js --config test/acceptance/cucumber.config.cjs --format html:test/reports/cucumber/index.html",
+    "test:acceptance:ci": "npm run test:acceptance -- -p ci",
     "typecheck:test": "tsc -p tsconfig.test.json --noEmit"
   },
   "publishConfig": {
@@ -63,6 +65,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-json-schema-validator": "^6.2.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-sonarjs": "^3.0.5",
     "husky": "^9.1.7",
@@ -127,6 +130,11 @@
       "import": "./dist/step/index.js",
       "types": "./dist/step/index.d.ts",
       "require": "./dist/step/index.cjs"
+    },
+    "./utils": {
+      "import": "./dist/util/index.js",
+      "types": "./dist/util/index.d.ts",
+      "require": "./dist/util/index.cjs"
     }
   },
   "typesVersions": {

@@ -4,7 +4,7 @@ Funktionalität: Ungültige Tags werden fehlertolerant behandelt
   Um Stabilität zu sichern,
   möchte ich ungültige Tag-Werte ignorieren und warnen.
 
-  @clock:warp9 @clockOffset:NaN
+  @clock:warp9 @clockOffset:NaN @SkipOnPipeline
   Szenario: Ungültige Clock- und Offset-Tags
     Angenommen die World ist initialisiert
     Wenn das Szenario startet

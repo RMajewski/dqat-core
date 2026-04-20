@@ -10,7 +10,7 @@
  * - delayMs wird korrekt nach number gecastet
  */
 
-import Ajv2020 from 'ajv/dist/2020';
+import Ajv2020 from 'ajv/dist/2020.js';
 import { describe, expect, it } from 'vitest';
 import { HolodeckSceneLoadError } from '../../../src/holodeck/holodeck.error.ts';
 import { SceneLoader } from '../../../src/holodeck/sceneLoader.ts';

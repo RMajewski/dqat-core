@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "name": "happy",
+  "routes": [
+    {
+      "id": "get-status",
+      "request": {
+        "method": "GET",
+        "path": "/api/status"
+      },
+      "response": {
+        "statusCode": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "status": "ok"
+        }
+      },
+      "times": {
+        "unlimited": true
+      }
+    }
+  ]
+}

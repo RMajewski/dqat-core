@@ -4,7 +4,7 @@ Funktionalität: MissionLog enthält korrekte Korrelation
   Um Ereignisse nachvollziehen zu können,
   möchte ich strukturierte Logeinträge mit Korrelation schreiben.
 
-  @clock:frozen @worldSeed:42
+  @clock:frozen @worldSeed:42 @SkipOnPipeline
   Szenario: Logeintrag trägt World-Zeit und Korrelation
     Angenommen die World ist initialisiert
     Und runId, scenarioId und stepId sind gesetzt

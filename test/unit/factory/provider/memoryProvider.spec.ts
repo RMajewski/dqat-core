@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { MemoryProvider } from '../../../../src/factory/provider/memoryProvider.ts';
-import type { MemoryProviderOptions } from '../../../../src/type/provider/providerOptions.ts';
+import type { IMemoryProviderOptions } from '../../../../src/type/provider/providerOptions.ts';
 
-const make = (input: unknown, opts?: MemoryProviderOptions): MemoryProvider =>
+const make = (input: unknown, opts?: IMemoryProviderOptions): MemoryProvider =>
   new MemoryProvider(input as Record<string, unknown>, opts);
+
+const FEATURE_ENABLED = 'feature.enabled';
 
 describe('MemoryProvider', () => {
   describe('Basics', () => {
@@ -26,6 +28,97 @@ describe('MemoryProvider', () => {
       listed1.a = 999 as unknown as never;
       const listed2 = provider.list();
       expect(listed2).toEqual({ a: 1, b: 2 });
+    });
+  });
+
+  describe('set', () => {
+    it('setzt einen neuen Key, der anschließend mit get gelesen werden kann', () => {
+      const provider = make({}, { flatten: false });
+
+      provider.set(FEATURE_ENABLED, true);
+
+      expect(provider.get(FEATURE_ENABLED)).toBe(true);
+    });
+
+    it('überschreibt einen bestehenden Key', () => {
+      const provider = make({ 'feature.enabled': false }, { flatten: false });
+
+      provider.set(FEATURE_ENABLED, true);
+
+      expect(provider.get(FEATURE_ENABLED)).toBe(true);
+    });
+
+    it('list enthält einen neu gesetzten Key', () => {
+      const provider = make({}, { flatten: false });
+
+      provider.set('api.baseUrl', 'https://example.test');
+
+      expect(provider.list()).toEqual({
+        'api.baseUrl': 'https://example.test',
+      });
+    });
+
+    it('list(prefix) filtert nach gesetzten Werten weiterhin korrekt', () => {
+      const provider = make({}, { flatten: false });
+
+      provider.set('db.host', 'localhost');
+      provider.set('db.port', 3306);
+      provider.set('api.url', 'https://example.test');
+
+      expect(provider.list('db')).toEqual({
+        'db.host': 'localhost',
+        'db.port': 3306,
+      });
+    });
+
+    it('verhält sich bei überschriebenen Werten konsistent mit der bisherigen Provider-Logik', () => {
+      const provider = make(
+        { 'feature.enabled': false, 'feature.name': 'alpha' },
+        { flatten: false },
+      );
+
+      provider.set(FEATURE_ENABLED, true);
+
+      expect(provider.get(FEATURE_ENABLED)).toBe(true);
+      expect(provider.list()).toEqual({
+        'feature.enabled': true,
+        'feature.name': 'alpha',
+      });
+    });
+
+    it('entfernt einen Key bei undefined, wenn dropUndefined aktiv ist', () => {
+      const provider = make(
+        { 'feature.enabled': true },
+        { flatten: false, dropUndefined: true },
+      );
+
+      provider.set(FEATURE_ENABLED, undefined);
+
+      expect(provider.get(FEATURE_ENABLED)).toBeUndefined();
+      expect(provider.list()).toEqual({});
+    });
+
+    it('behält undefined bei, wenn dropUndefined deaktiviert ist', () => {
+      const provider = make(
+        { 'feature.enabled': true },
+        { flatten: false, dropUndefined: false },
+      );
+
+      provider.set(FEATURE_ENABLED, undefined);
+
+      const listed = provider.list();
+
+      expect(Object.hasOwn(listed, FEATURE_ENABLED)).toBeTruthy();
+      expect(listed[FEATURE_ENABLED]).toBeUndefined();
+    });
+
+    it('speichert Funktionswerte nicht', () => {
+      const provider = make({ 'feature.enabled': true }, { flatten: false });
+
+      provider.set(FEATURE_ENABLED, () => true);
+
+      expect(provider.get(FEATURE_ENABLED)).toBeUndefined();
+      expect(provider.list()).toEqual({});
     });
   });
 

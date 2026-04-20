@@ -1,5 +1,5 @@
 import type {
-  MemoryProviderOptions,
+  IMemoryProviderOptions,
   NormalizedMemoryOptions,
 } from '../../type/provider/providerOptions.ts';
 import type { StarfleetDirectiveProvider } from '../../type/starfleetDirective.ts';
@@ -27,13 +27,13 @@ export class MemoryProvider implements StarfleetDirectiveProvider {
    */
   constructor(
     input: Record<string, unknown>,
-    inputOptions?: MemoryProviderOptions,
+    inputOptions?: IMemoryProviderOptions,
   );
   constructor(
     input: string | number | boolean | null | undefined,
-    inputOptions?: MemoryProviderOptions,
+    inputOptions?: IMemoryProviderOptions,
   );
-  constructor(input: unknown, inputOptions: MemoryProviderOptions = {}) {
+  constructor(input: unknown, inputOptions: IMemoryProviderOptions = {}) {
     this.options = normalizeMemoryOptions(inputOptions ?? {});
     this.name = this.options.name ?? 'memory';
 
@@ -81,6 +81,28 @@ export class MemoryProvider implements StarfleetDirectiveProvider {
       }
     }
     return out;
+  }
+
+  /**
+   * Setzt oder überschreibt einen einzelnen Wert im In-Memory-Speicher.
+   *
+   * Verhalten:
+   * - Funktionswerte werden nicht gespeichert.
+   * - `undefined` wird bei aktivem `dropUndefined` entfernt.
+   * - In allen anderen Fällen wird der Wert direkt unter dem exakten Key gespeichert.
+   */
+  public set(key: string, value: unknown): void {
+    if (typeof value === 'function') {
+      delete this.flatData[key];
+      return;
+    }
+
+    if (value === undefined && this.options.dropUndefined) {
+      delete this.flatData[key];
+      return;
+    }
+
+    this.flatData[key] = value;
   }
 
   /** Aktive Optionen (Debug/Tests). */

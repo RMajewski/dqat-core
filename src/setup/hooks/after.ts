@@ -1,5 +1,6 @@
 import type { ITestCaseHookParameter } from '@cucumber/cucumber';
 import { After } from '@cucumber/cucumber';
+import { shutdownHolodeckWithLogs } from '../../util/holodeck/shutdown.ts';
 import type { DqatWorld } from '../DqatWorld.ts';
 
 /**
@@ -17,6 +18,8 @@ export function afterHookGeneral(): void {
       correlation: { runId, scenarioId },
       result: { status: scenario.result?.status },
     });
+
+    await shutdownHolodeckWithLogs(this);
 
     await this.disposeAll();
   });

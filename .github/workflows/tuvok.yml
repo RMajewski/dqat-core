@@ -40,6 +40,9 @@ jobs:
       - name: 🧭 Prime Directive Compliance (Lint CI)
         run: pnpm run lint:ci
 
+      - name: 🏗️ Core Assembly
+        run: pnpm run build
+
       - name: 🧪 Core Validation – Unit Tests
         run: pnpm run test:unit:ci
 

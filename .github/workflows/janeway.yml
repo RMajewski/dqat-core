@@ -62,10 +62,10 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git remote set-url origin "git@github.com:${{ github.repository }}.git"
 
-      - name: 🧪 Load PNPM Protocols (pnpm 10.15.0)
+      - name: 🧪 Load PNPM Protocols (pnpm 10.33.0)
         uses: pnpm/action-setup@v4
         with:
-          version: 10.15.0
+          version: 10.33.0
 
       - name: 🖥️ Initialize Starfleet Node (22.18.x + pnpm cache)
         uses: actions/setup-node@v5

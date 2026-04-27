@@ -1,3 +1,14 @@
+# [1.0.0-alpha.3](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2026-04-27)
+
+
+### Features
+
+* **core:** EnvProviderOptions rekonstruieren und MemoryProvider um set erweitern ([db2d7a6](https://github.com/RMajewski/dqat-core/commit/db2d7a66cc8a540dc7a77d98b9b42be2cf4740da))
+* **holodeck:** Holodeck-Start und Szenenladen implementieren ([85c1228](https://github.com/RMajewski/dqat-core/commit/85c12285531566371633986c82a46cbaaa31271c))
+* **holodeck:** MockServer-System-Output deaktiviert und Logs als Dateien gespeichert ([50d5dd1](https://github.com/RMajewski/dqat-core/commit/50d5dd1b8792b9c6b913884786abcbf8fe7daf7f))
+* **starfleet-directives:** Env-Provider-Optionen beim Laden der Directives verfügbar machen ([dc0ea5c](https://github.com/RMajewski/dqat-core/commit/dc0ea5cab4f15ca18eac5297f7a06ae990041e5b))
+* **utils:** Add isStarfleetDirectiveKey ([565cf2a](https://github.com/RMajewski/dqat-core/commit/565cf2af6117b9f1b8f76caaf9fffeeb9abf313e))
+
 # [1.0.0-alpha.2](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2026-04-14)
 
 ### Bug Fixes

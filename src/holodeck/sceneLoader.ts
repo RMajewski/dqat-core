@@ -1,4 +1,4 @@
-import holodeckSceneSchema from '../config/schema/holodeck.scene.v1.json';
+import holodeckSceneSchema from '../eslint/schemas/holodeck.scene.v1.json';
 import { HolodeckSceneLoadErrorCode } from '../type/holodeck/holodeck.error.ts';
 import type {
   LoadedHolodeckRoute,

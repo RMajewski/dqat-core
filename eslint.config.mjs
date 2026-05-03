@@ -2,12 +2,12 @@
 import js from '@eslint/js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { holodeckSceneConfig } from './src/eslint/index.ts';
 
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptEslintParser from '@typescript-eslint/parser';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
-import jsonSchemaValidator from 'eslint-plugin-json-schema-validator';
 import prettier from 'eslint-plugin-prettier';
 import sonarjs from 'eslint-plugin-sonarjs';
 
@@ -247,24 +247,5 @@ export default [
   },
 
   // JSON-Schema-Validation
-  ...jsonSchemaValidator.configs.recommended,
-  {
-    files: ['**/*.scene.json'],
-    plugins: {
-      'json-schema-validator': jsonSchemaValidator,
-    },
-    rules: {
-      'json-schema-validator/no-invalid': [
-        'error',
-        {
-          schemas: [
-            {
-              fileMatch: ['**/*.scene.json'],
-              schema: './src/config/schema/holodeck.scene.v1.json',
-            },
-          ],
-        },
-      ],
-    },
-  },
+  ...holodeckSceneConfig,
 ];

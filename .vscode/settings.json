@@ -34,7 +34,7 @@
   "json.schemas": [
     {
       "fileMatch": ["**/*.scene.json"],
-      "url": "./src/config/schema/holodeck.scene.v1.json"
+      "url": "./src/eslint/schemas/holodeck.scene.v1.json"
     }
   ],
 

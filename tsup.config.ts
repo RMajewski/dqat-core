@@ -1,9 +1,11 @@
+import { cpSync, mkdirSync } from 'node:fs';
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
     'src/index.ts',
     'src/callback/index.ts',
+    'src/eslint/index.ts',
     'src/setup/index.ts',
     'src/step/index.ts',
     'src/util/index.ts',
@@ -19,4 +21,12 @@ export default defineConfig({
   treeshake: true,
   skipNodeModulesBundle: true,
   tsconfig: './tsconfig.framework.json',
+  onSuccess: async (): Promise<void> => {
+    mkdirSync('dist/eslint/schemas', { recursive: true });
+
+    cpSync(
+      'src/eslint/schemas/holodeck.scene.v1.json',
+      'dist/eslint/schemas/holodeck.scene.v1.json',
+    );
+  },
 });

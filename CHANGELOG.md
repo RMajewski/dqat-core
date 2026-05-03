@@ -1,3 +1,10 @@
+# [1.0.0-alpha.4](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2026-05-03)
+
+
+### Features
+
+* **holodeck:** Einstiegspunkt und Holodeck-Szenenvalidierung hinzugefügt ([b540d09](https://github.com/RMajewski/dqat-core/commit/b540d09e2c648575718fe3329aec2bc28e030db4))
+
 # [1.0.0-alpha.3](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2026-04-27)
 
 ### Features

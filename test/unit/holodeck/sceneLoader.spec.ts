@@ -17,10 +17,14 @@ import { SceneLoader } from '../../../src/holodeck/sceneLoader.ts';
 import { HolodeckSceneLoadErrorCode } from '../../../src/type/holodeck/holodeck.error.ts';
 import type { HolodeckSceneDocument } from '../../../src/type/holodeck/sceneDocument.ts';
 import { badTemplateScene } from './scene/badTemplate.scene.ts';
+import { bodyAndBodyFileScene } from './scene/bodyAndBodyFile.scene.ts';
+import { bodyFileScene } from './scene/bodyFile.scene.ts';
+import { bodyFileWithTemplateScene } from './scene/bodyFileWithTemplate.scene.ts';
 import { happyScene } from './scene/happy.scene.ts';
 import { serverErrorScene } from './scene/serverError.scene.ts';
 import { timeScene } from './scene/time.scene.ts';
 import { timeoutScene } from './scene/timeout.scene.ts';
+import { withoutResponseBodyScene } from './scene/withoutResponseBody.scene.ts';
 
 describe('SceneLoader', () => {
   const nowDate = '2025-10-24T15:00:00.000Z' as const;
@@ -62,6 +66,68 @@ describe('SceneLoader', () => {
     it('setzt times korrekt auf { unlimited: true }', async () => {
       const loaded = await loader.loadScene('happy', {});
       expect(loaded.routes[0].times).toEqual({ unlimited: true });
+    });
+  });
+
+  describe('bodyFile', () => {
+    const now = new Date(nowDate);
+
+    it('lädt response.body aus bodyFile', async () => {
+      const loader = buildLoaderWithInMemoryScenes(
+        { bodyFile: bodyFileScene },
+        now,
+        {
+          'html/test1.html': '<h1>Testseite</h1>',
+        },
+      );
+
+      const loaded = await loader.loadScene('bodyFile', {});
+      const body = loaded.routes[0].response.body;
+
+      expect(body).toBe('<h1>Testseite</h1>');
+    });
+
+    it('rendert Templates im geladenen bodyFile-Inhalt', async () => {
+      const loader = buildLoaderWithInMemoryScenes(
+        { bodyFileWithTemplate: bodyFileWithTemplateScene },
+        now,
+        {
+          'html/test-template.html': '<h1>{{title}}</h1>',
+        },
+      );
+
+      const loaded = await loader.loadScene('bodyFileWithTemplate', {});
+      const body = loaded.routes[0].response.body;
+
+      expect(body).toBe('<h1>Schwarze Wegameise</h1>');
+    });
+
+    it('wirft schemaViolation bei unbekannter Template-Variable im bodyFile-Inhalt', async () => {
+      const loader = buildLoaderWithInMemoryScenes(
+        { bodyFile: bodyFileScene },
+        now,
+        {
+          'html/test1.html': '<h1>{{missingTitle}}</h1>',
+        },
+      );
+
+      await expect(loader.loadScene('bodyFile', {})).rejects.toMatchObject({
+        code: HolodeckSceneLoadErrorCode.SCHEMA_VIOLATION,
+        path: 'routes[0].response.body',
+      });
+    });
+
+    it('wirft filesystemError, wenn bodyFile nicht gelesen werden kann', async () => {
+      const loader = buildLoaderWithInMemoryScenes(
+        { bodyFile: bodyFileScene },
+        now,
+        {},
+      );
+
+      await expect(loader.loadScene('bodyFile', {})).rejects.toMatchObject({
+        code: HolodeckSceneLoadErrorCode.FILESYSTEM_ERROR,
+        path: 'routes[0].response.bodyFile',
+      });
     });
   });
 
@@ -179,12 +245,44 @@ describe('SceneLoader', () => {
         path: 'scene',
       });
     });
+
+    it('wirft schemaViolation, wenn response weder body noch bodyFile enthält', async () => {
+      const loader = buildLoaderWithInMemoryScenes(
+        { withoutResponseBody: withoutResponseBodyScene },
+        now,
+      );
+
+      await expect(
+        loader.loadScene('withoutResponseBody', {}),
+      ).rejects.toMatchObject({
+        code: HolodeckSceneLoadErrorCode.SCHEMA_VIOLATION,
+        path: 'scene',
+      });
+    });
+
+    it('wirft schemaViolation, wenn response body und bodyFile gleichzeitig enthält', async () => {
+      const loader = buildLoaderWithInMemoryScenes(
+        { bodyAndBodyFile: bodyAndBodyFileScene },
+        now,
+        {
+          'html/test1.html': '<h1>Testseite</h1>',
+        },
+      );
+
+      await expect(
+        loader.loadScene('bodyAndBodyFile', {}),
+      ).rejects.toMatchObject({
+        code: HolodeckSceneLoadErrorCode.SCHEMA_VIOLATION,
+        path: 'scene',
+      });
+    });
   });
 });
 
 function buildLoaderWithInMemoryScenes(
   sceneMap: Record<string, HolodeckSceneDocument>,
   fixedNow: Date,
+  bodyFileContentMap: Record<string, string | undefined> = {},
 ): SceneLoader {
   const ajv = new Ajv2020({
     allErrors: true,
@@ -204,6 +302,19 @@ function buildLoaderWithInMemoryScenes(
         });
       }
       return document;
+    },
+    readBodyFileContent: (bodyFilePath: string) => {
+      const content = bodyFileContentMap[bodyFilePath];
+
+      if (content === undefined) {
+        throw new HolodeckSceneLoadError({
+          code: HolodeckSceneLoadErrorCode.FILESYSTEM_ERROR,
+          message: `Body file ${bodyFilePath} not found`,
+          path: 'routes[0].response.bodyFile',
+        });
+      }
+
+      return content;
     },
     nowProvider: () => fixedNow,
     ajvInstance: ajv,

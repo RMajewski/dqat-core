@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "name": "body-file-html",
+  "variables": {
+    "title": {
+      "type": "string",
+      "default": "Schwarze Wegameise"
+    },
+    "scientificName": {
+      "type": "string",
+      "default": "Lasius niger"
+    }
+  },
+  "routes": [
+    {
+      "id": "body-file-html-route",
+      "request": {
+        "method": "GET",
+        "path": "/test.html"
+      },
+      "response": {
+        "statusCode": 200,
+        "headers": {
+          "Content-Type": "text/html"
+        },
+        "bodyFile": "html/test1.html"
+      },
+      "times": {
+        "unlimited": true
+      }
+    }
+  ]
+}

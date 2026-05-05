@@ -93,6 +93,24 @@ export interface HolodeckResponseSpec {
   body?: unknown;
 
   /**
+   * Dateiverweis für den Antwort-Body.
+   *
+   * Wenn gesetzt, wird der Inhalt der angegebenen Datei geladen
+   * und als `response.body` verwendet.
+   *
+   * Der Pfad wird relativ zu `holodeck.fixturesDir` aufgelöst.
+   * Unterverzeichnisse sind erlaubt (z. B. "html/test1.html").
+   *
+   * Der geladene Inhalt darf ebenfalls Template-Strings enthalten
+   * und wird durch den SceneLoader gerendert.
+   *
+   * Hinweis:
+   * - Es muss entweder `body` oder `bodyFile` gesetzt sein.
+   * - Beide gleichzeitig sind nicht erlaubt (Schema-Validierung).
+   */
+  bodyFile?: string;
+
+  /**
    * Künstliche Verzögerung in Millisekunden.
    *
    * Im rohen Dokument (SceneDocument):

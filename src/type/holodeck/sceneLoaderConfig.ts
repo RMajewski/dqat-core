@@ -29,6 +29,18 @@ export interface SceneLoaderConfig {
   ) => Promise<HolodeckSceneDocument>;
 
   /**
+   * Lädt den Inhalt einer Body-Datei synchron.
+   *
+   * Der übergebene Pfad stammt aus `response.bodyFile` und wird von der
+   * konkreten Implementierung relativ zu `holodeck.fixturesDir` aufgelöst.
+   *
+   * Die Methode arbeitet bewusst synchron, damit der Cucumber-JS-Lifecycle
+   * nicht durch vergessene `await`-Aufrufe oder verzögerte Dateizugriffe
+   * instabil werden kann.
+   */
+  readBodyFileContent: (bodyFilePath: string) => string;
+
+  /**
    * Liefert die aktuelle Zeit als Date-Objekt.
    * Diese Zeitquelle wird für die Templates {{now}} und {{nowEpochMs}} verwendet.
    *

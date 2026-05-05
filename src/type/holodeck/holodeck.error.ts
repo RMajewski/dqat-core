@@ -48,6 +48,19 @@ export enum HolodeckSceneLoadErrorCode {
    * Fehler aus der Mock-Engine oder einer anderen technischen Quelle.
    */
   ENGINE_ERROR = 'engineError',
+
+  /**
+   * Fehler beim Zugriff auf das Dateisystem, z. B. beim Laden von `bodyFile`.
+   *
+   * Dieser Fehler tritt auf, wenn die Szene zwar gültig ist, aber externe Ressourcen
+   * nicht geladen werden können. Typische Ursachen sind:
+   *
+   * - Die angegebene Datei existiert nicht.
+   * - Der Pfad liegt außerhalb des erlaubten `holodeck.fixturesDir`.
+   * - Die Datei kann nicht gelesen werden (z. B. fehlende Berechtigungen).
+   * - Der angegebene Pfad ist ungültig oder nicht auflösbar.
+   */
+  FILESYSTEM_ERROR = 'filesystemError',
 }
 
 /**

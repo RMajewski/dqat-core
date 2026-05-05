@@ -1,12 +1,10 @@
 import Ajv2020 from 'ajv/dist/2020.js';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { HolodeckSceneLoadError } from '../holodeck/holodeck.error.ts';
+import { resolve } from 'node:path';
 import { Holodeck } from '../holodeck/holodeck.ts';
 import { SceneLoader } from '../holodeck/sceneLoader.ts';
 import type { DqatWorld } from '../setup/DqatWorld.ts';
-import { HolodeckSceneLoadErrorCode } from '../type/holodeck/holodeck.error.ts';
-import type { HolodeckSceneDocument } from '../type/holodeck/sceneDocument.ts';
+import { readBodyFileContent } from '../util/holodeck/readBodyFile.ts';
+import { readSceneDocumentByName } from '../util/holodeck/readScene.ts';
 import { shutdownHolodeckWithLogs } from '../util/holodeck/shutdown.ts';
 
 /**
@@ -51,44 +49,15 @@ export async function startHolodeckCallback(
 
   const fixturesDir =
     this.get<string>('holodeck.fixturesDir') ??
-    path.resolve(process.cwd(), 'test/acceptance/fixtures/holodeck');
+    resolve(process.cwd(), 'test/acceptance/fixtures/holodeck');
 
   const sceneLoader = new SceneLoader({
-    readSceneDocumentByName: async (
-      sceneName: string,
-    ): Promise<HolodeckSceneDocument> => {
-      const sceneFilePath = path.join(fixturesDir, `${sceneName}.scene.json`);
+    readSceneDocumentByName: (sceneName) =>
+      readSceneDocumentByName(fixturesDir, sceneName),
 
-      let documentText: string;
-      try {
-        documentText = await readFile(sceneFilePath, 'utf8');
-      } catch (error) {
-        const isMissingFile =
-          typeof error === 'object' &&
-          error !== null &&
-          'code' in error &&
-          (error as { code?: string }).code === 'ENOENT';
+    readBodyFileContent: (bodyFilePath) =>
+      readBodyFileContent(fixturesDir, bodyFilePath),
 
-        if (isMissingFile) {
-          throw new HolodeckSceneLoadError({
-            code: HolodeckSceneLoadErrorCode.UNKNOWN_SCENE,
-            message: `Scene "${sceneName}" not found in ${fixturesDir}`,
-            path: 'scene',
-          });
-        }
-        throw error;
-      }
-
-      try {
-        return JSON.parse(documentText) as HolodeckSceneDocument;
-      } catch {
-        throw new HolodeckSceneLoadError({
-          code: HolodeckSceneLoadErrorCode.SCHEMA_VIOLATION,
-          message: `Scene "${sceneName}" contains invalid JSON`,
-          path: sceneFilePath,
-        });
-      }
-    },
     nowProvider: () => this.now(),
     ajvInstance: new Ajv2020({
       allErrors: true,

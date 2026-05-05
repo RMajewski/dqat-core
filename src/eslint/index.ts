@@ -1,4 +1,4 @@
-import { Linter } from 'eslint';
+import type { Linter } from 'eslint';
 import jsonSchemaValidator from 'eslint-plugin-json-schema-validator';
 import holodeckSceneSchema from './schemas/holodeck.scene.v1.json' with { type: 'json' };
 
@@ -6,10 +6,9 @@ import holodeckSceneSchema from './schemas/holodeck.scene.v1.json' with { type: 
  * Vorgefertigte ESLint-Konfiguration für Holodeck-Szenen.
  */
 export const holodeckSceneConfig: Linter.Config[] = [
+  ...jsonSchemaValidator.configs.base,
   {
-    plugins: {
-      'json-schema-validator': jsonSchemaValidator,
-    },
+    files: ['**/*.scene.json'],
     rules: {
       'json-schema-validator/no-invalid': [
         'error',

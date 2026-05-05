@@ -76,6 +76,23 @@
           "response": {
             "type": "object",
             "required": ["statusCode"],
+            "oneOf": [
+              {
+                "required": ["body"],
+                "properties": {
+                  "body": {}
+                }
+              },
+              {
+                "required": ["bodyFile"],
+                "properties": {
+                  "bodyFile": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            ],
             "additionalProperties": false,
             "properties": {
               "statusCode": {
@@ -88,6 +105,10 @@
                 "additionalProperties": { "type": "string" }
               },
               "body": {},
+              "bodyFile": {
+                "type": "string",
+                "minLength": 1
+              },
               "delayMs": {
                 "oneOf": [
                   { "type": "integer", "minimum": 0 },

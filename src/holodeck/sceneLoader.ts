@@ -28,11 +28,13 @@ type TemplateChunk =
  */
 export class SceneLoader {
   private readonly readSceneDocumentByName: SceneLoaderConfig['readSceneDocumentByName'];
+  private readonly readBodyFileContent: SceneLoaderConfig['readBodyFileContent'];
   private readonly nowProvider: SceneLoaderConfig['nowProvider'];
   private readonly validateSceneDocument: (data: unknown) => boolean;
 
   constructor(config: SceneLoaderConfig) {
     this.readSceneDocumentByName = config.readSceneDocumentByName;
+    this.readBodyFileContent = config.readBodyFileContent;
     this.nowProvider = config.nowProvider;
     const validateFn = config.ajvInstance.compile(holodeckSceneSchema);
     this.validateSceneDocument = validateFn;
@@ -73,9 +75,19 @@ export class SceneLoader {
 
     // 3. Templates in allen Routen rendern
     const renderedRoutes: LoadedHolodeckScene['routes'] =
-      sceneDocument.routes.map((route, index) =>
-        this.renderRoute(route, index, now, resolvedVariables),
-      );
+      sceneDocument.routes.map((route, index) => {
+        const routeWithResolvedBodyFile = this.resolveRouteBodyFile(
+          route,
+          index,
+        );
+
+        return this.renderRoute(
+          routeWithResolvedBodyFile,
+          index,
+          now,
+          resolvedVariables,
+        );
+      });
 
     // 4. Vollständig gerenderte Szene zurückgeben
     return {
@@ -85,6 +97,63 @@ export class SceneLoader {
       meta: sceneDocument.meta,
       routes: renderedRoutes,
     };
+  }
+
+  /**
+   * Löst einen optionalen `response.bodyFile` auf und ersetzt ihn durch einen geladenen `response.body`.
+   *
+   * Wenn in der Route ein `bodyFile` definiert ist, wird der Dateiinhalt über
+   * `readBodyFileContent` geladen und als `response.body` gesetzt.
+   *
+   * Der ursprüngliche `bodyFile` wird dabei entfernt, da die nachfolgenden Schritte
+   * ausschließlich mit dem finalen `body` arbeiten.
+   *
+   * Diese Methode kümmert sich ausschließlich um das Laden des Body-Inhalts aus dem
+   * Dateisystem und trifft keine Entscheidungen zur Template-Verarbeitung.
+   * Das Rendering von Template-Variablen erfolgt später in `renderRoute`.
+   *
+   * @param route - Die zu verarbeitende Route aus dem Scene-Dokument.
+   * @param routeIndex - Index der Route innerhalb des Scene-Dokuments.
+   * @returns Eine neue Route, bei der `bodyFile` durch `body` ersetzt wurde, sofern vorhanden.
+   *
+   * @throws {HolodeckSceneLoadError}
+   * Wird ausgelöst, wenn die Datei nicht geladen werden kann
+   * (z. B. Datei nicht gefunden oder nicht lesbar).
+   */
+  resolveRouteBodyFile(
+    route: HolodeckRouteSpec,
+    routeIndex: number,
+  ): HolodeckRouteSpec {
+    const response = route.response;
+    const bodyFile = response.bodyFile;
+
+    if (!bodyFile) {
+      return route;
+    }
+
+    try {
+      const fileContent = this.readBodyFileContent(bodyFile);
+
+      return {
+        ...route,
+        response: {
+          ...response,
+          body: fileContent,
+          bodyFile: undefined,
+        },
+      };
+    } catch (error) {
+      if (error instanceof HolodeckSceneLoadError) {
+        throw error;
+      }
+
+      throw new HolodeckSceneLoadError({
+        code: HolodeckSceneLoadErrorCode.FILESYSTEM_ERROR,
+        message: `Failed to read body file: ${response.bodyFile}`,
+        path: `routes[${routeIndex}].response.bodyFile`,
+        received: response.bodyFile,
+      });
+    }
   }
 
   /**

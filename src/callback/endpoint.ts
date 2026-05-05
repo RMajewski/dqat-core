@@ -122,3 +122,56 @@ export function expectLastResponseStatusCallback(
     );
   }
 }
+
+/**
+ * Prüft, ob der zuletzt empfangene HTTP-Response-Body einen bestimmten Text enthält.
+ *
+ * Der Body wird dabei als reiner String betrachtet. Es findet keine
+ * Interpretation als JSON oder HTML statt. Dadurch bleibt der Schritt
+ * bewusst generisch und unabhängig von einer konkreten Darstellungsschicht.
+ *
+ * Voraussetzung:
+ * - Vorher muss ein Request über einen Schritt wie
+ *   `Wenn ich den Endpunkt "...“ über GET abrufe`
+ *   ausgeführt worden sein.
+ * - Das Ergebnis muss in `this.lastResponse` gespeichert sein.
+ *
+ * Typischer Gherkin-Schritt:
+ *
+ *   Und der Response-Body enthält "<h1>Schwarze Wegameise</h1>"
+ *
+ * @example
+ * Gherkin (Feature-Datei, deutsch):
+ *   Wenn ich den Endpunkt "/api/status" über GET abrufe
+ *   Dann erwarte ich den HTTP-Statuscode 200
+ *   Und der Response-Body enthält "<h1>Schwarze Wegameise</h1>"
+ *
+ * @param this DqatWorld – Gemeinsamer Szenario-Kontext.
+ * @param expectedContent string – Erwarteter Teilstring, der im Response-Body enthalten sein soll.
+ *
+ * @throws Error
+ * Wird ausgelöst, wenn kein vorheriger Response vorhanden ist oder
+ * der erwartete Inhalt nicht gefunden wird.
+ */
+export function responseBodyContainsCallback(
+  this: DqatWorld,
+  expectedContent: string,
+): void {
+  if (!this.lastResponse) {
+    throw new Error(
+      'Es liegt keine letzte Response vor, die geprüft werden kann.',
+    );
+  }
+
+  const { bodyText } = this.lastResponse;
+
+  if (!bodyText.includes(expectedContent)) {
+    throw new Error(
+      [
+        'Der Response-Body enthält den erwarteten Inhalt nicht.',
+        `Erwartet: ${expectedContent}`,
+        `Tatsächlicher Body: ${bodyText}`,
+      ].join('\n'),
+    );
+  }
+}

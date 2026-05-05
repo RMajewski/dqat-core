@@ -1,3 +1,10 @@
+# [1.0.0-alpha.5](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2026-05-05)
+
+
+### Bug Fixes
+
+* **holodeck:** Scene-Dateien korrekt in Flat Config berücksichtigt ([4ec03c1](https://github.com/RMajewski/dqat-core/commit/4ec03c147c48887eee6d45131ce4d5c6a423e7f1))
+
 # [1.0.0-alpha.4](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2026-05-03)
 
 ### Features

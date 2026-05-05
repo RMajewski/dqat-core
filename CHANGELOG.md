@@ -1,3 +1,11 @@
+# [1.0.0-alpha.6](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2026-05-05)
+
+
+### Features
+
+* **holodeck:** Response-Body-Assertion-Schritt und bodyFile-Akzeptanztest ergänzt ([f051c05](https://github.com/RMajewski/dqat-core/commit/f051c0531bb1bbb2d8a44161bb3c63e57aed1621))
+* **holodeck:** Unterstützung für bodyFile in Response implementieren ([0a3802d](https://github.com/RMajewski/dqat-core/commit/0a3802dca091bfb665083f94cd3cecf8d6511113))
+
 # [1.0.0-alpha.5](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2026-05-05)
 
 

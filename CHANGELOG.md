@@ -1,3 +1,10 @@
+# [1.0.0-alpha.7](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2026-05-06)
+
+
+### Bug Fixes
+
+* **world:** ICucumberWorld um IWorld erweitern ([a5e3638](https://github.com/RMajewski/dqat-core/commit/a5e3638e5fcc299a8c547420382438484f41a87b))
+
 # [1.0.0-alpha.6](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2026-05-05)
 
 

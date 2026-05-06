@@ -138,13 +138,13 @@ export function expectLastResponseStatusCallback(
  *
  * Typischer Gherkin-Schritt:
  *
- *   Und der Response-Body enthält "<h1>Schwarze Wegameise</h1>"
+ *   Und der Response-Body enthält "<h1>U.S.S. Voyager</h1>"
  *
  * @example
  * Gherkin (Feature-Datei, deutsch):
  *   Wenn ich den Endpunkt "/api/status" über GET abrufe
  *   Dann erwarte ich den HTTP-Statuscode 200
- *   Und der Response-Body enthält "<h1>Schwarze Wegameise</h1>"
+ *   Und der Response-Body enthält "<h1>U.S.S. Voyager</h1>"
  *
  * @param this DqatWorld – Gemeinsamer Szenario-Kontext.
  * @param expectedContent string – Erwarteter Teilstring, der im Response-Body enthalten sein soll.

@@ -14,7 +14,7 @@ export function afterHookGeneral(): void {
     const runId = this.get('run.id') as string;
     const scenarioId = this.get('scenario.id') as string;
 
-    this.log('info', 'scenario finished', {
+    this.recordMissionEvent('info', 'scenario finished', {
       correlation: { runId, scenarioId },
       result: { status: scenario.result?.status },
     });

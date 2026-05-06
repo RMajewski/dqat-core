@@ -1,3 +1,4 @@
+import type { IWorld } from '@cucumber/cucumber';
 import type { Astrometrics } from '../astrometrics/astrometrics.ts';
 import type {
   IStarfleetDirectiveSchema,
@@ -19,7 +20,7 @@ import type { StarfleetDirectives } from './starfleetDirective.ts';
  * - sowie eine Möglichkeit, szenario-lokale Overrides (höchste Priorität)
  *   über den Memory-Provider zu setzen.
  */
-export interface ICucumberWorld {
+export interface ICucumberWorld extends IWorld {
   /**
    * Instanz der Astrometrics-World-Zeit.
    *

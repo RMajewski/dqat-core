@@ -79,7 +79,7 @@ export async function startHolodeckCallback(
   this.holodeck = holodeck;
   this.set('baseUrl', startResult.baseUrl);
 
-  this.log('info', 'holodeck started', {
+  this.recordMissionEvent('info', 'holodeck started', {
     mode,
     baseUrl: startResult.baseUrl,
     fixturesDir,
@@ -120,7 +120,10 @@ export async function loadSceneCallback(
 
   const sceneHandle = await this.holodeck.loadScene(sceneName, {});
   this.set('holodeck.sceneHandle', sceneHandle);
-  this.log('info', 'holodeck scene loaded', { sceneName, sceneHandle });
+  this.recordMissionEvent('info', 'holodeck scene loaded', {
+    sceneName,
+    sceneHandle,
+  });
 }
 
 /**

@@ -14,12 +14,16 @@ import { extractAstrometricsInitFromTags } from '../tags/clock.tags.ts';
 export function beforeScenarioGeneral(): void {
   Before(function (this: DqatWorld, scenario: ITestCaseHookParameter) {
     const tagNames = collectTagNames(scenario);
-    const effectiveDirectives = deriveEffectiveDirectives(tagNames, this.log);
+    const effectiveDirectives = deriveEffectiveDirectives(
+      tagNames,
+      this.recordMissionEvent,
+    );
 
     // Minimalistische Korrelation (kann später durch echte IDs ersetzt werden)
     const runId = (this.get('run.id') as string) ?? `run-${Date.now()}`;
     const scenarioId = `scenario-${Date.now()}`;
 
+    // TODO René: Ein Objekt mit allen Keys erstellen, so dass diese immer gleich geschrieben werden
     this.set('run.id', runId);
     this.set('scenario.id', scenarioId);
     this.set('scenario.cucumberScenarioId', scenario.pickle.id);
@@ -28,7 +32,7 @@ export function beforeScenarioGeneral(): void {
     this.set('effectiveDirectives', effectiveDirectives);
     this.set('tags', tagNames);
 
-    this.log('info', 'scenario started', {
+    this.recordMissionEvent('info', 'scenario started', {
       correlation: { runId, scenarioId },
       effectiveDirectives,
     });

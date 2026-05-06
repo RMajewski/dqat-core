@@ -1,3 +1,4 @@
+import { World } from '@cucumber/cucumber';
 import type { Astrometrics } from '../astrometrics/astrometrics.ts';
 import type {
   IStarfleetDirectiveSchema,
@@ -28,7 +29,7 @@ import { loadStarfleetDirectives } from './loadStarfleetDirectives.ts';
  * – Reale Clock/Store/MissionLog-Objekte aus Astrometrics
  * – Wirkung der Tags über eine echte Astrometrics-Instanz
  */
-export class DqatWorld implements ICucumberWorld {
+export class DqatWorld extends World implements ICucumberWorld {
   public astrometrics?: Astrometrics;
   public holodeck?: Holodeck;
   public lastResponse?: HttpResponseSnapshot;
@@ -109,7 +110,7 @@ export class DqatWorld implements ICucumberWorld {
    * Fügt einen Missionslog-Eintrag hinzu (nur Puffer für diese Iteration).
    * Spätere Iteration delegiert an Astrometrics.missionLog().append(...)
    */
-  public log = (
+  public recordMissionEvent = (
     level: MissionLogLevel,
     message: string,
     details?: Record<string, unknown>,
@@ -131,7 +132,7 @@ export class DqatWorld implements ICucumberWorld {
     disposer: () => void | Promise<void>,
   ): void => {
     // Für die Nachvollziehbarkeit im Log mitschreiben
-    this.log('info', 'resource attached', { resourceName });
+    this.recordMissionEvent('info', 'resource attached', { resourceName });
     this.disposerStack.push(disposer);
   };
 
@@ -149,7 +150,9 @@ export class DqatWorld implements ICucumberWorld {
       try {
         await disposer();
       } catch (error) {
-        this.log('error', 'resource dispose failed', { error: String(error) });
+        this.recordMissionEvent('error', 'resource dispose failed', {
+          error: String(error),
+        });
       } finally {
         disposedCount += 1;
       }

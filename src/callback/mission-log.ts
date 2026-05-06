@@ -15,7 +15,7 @@ export function missionLogWriteEntryWithLevelAndMessage(
   level: MissionLogLevel,
   message: string,
 ): void {
-  this.log(level, message);
+  this.recordMissionEvent(level, message);
 }
 
 /**

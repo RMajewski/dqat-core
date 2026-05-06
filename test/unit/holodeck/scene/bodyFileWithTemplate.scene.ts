@@ -14,7 +14,7 @@ export const bodyFileWithTemplateScene: HolodeckSceneDocument = {
   variables: {
     title: {
       type: 'string',
-      default: 'Schwarze Wegameise',
+      default: 'U.S.S. Voyager',
     },
   },
   routes: [

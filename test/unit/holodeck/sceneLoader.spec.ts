@@ -99,7 +99,7 @@ describe('SceneLoader', () => {
       const loaded = await loader.loadScene('bodyFileWithTemplate', {});
       const body = loaded.routes[0].response.body;
 
-      expect(body).toBe('<h1>Schwarze Wegameise</h1>');
+      expect(body).toBe('<h1>U.S.S. Voyager</h1>');
     });
 
     it('wirft schemaViolation bei unbekannter Template-Variable im bodyFile-Inhalt', async () => {

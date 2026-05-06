@@ -2,13 +2,13 @@
   "version": 1,
   "name": "body-file-html",
   "variables": {
-    "title": {
+    "shipName": {
       "type": "string",
-      "default": "Schwarze Wegameise"
+      "default": "U.S.S. Voyager"
     },
-    "scientificName": {
+    "shipClass": {
       "type": "string",
-      "default": "Lasius niger"
+      "default": "Intrepid-Klasse"
     }
   },
   "routes": [

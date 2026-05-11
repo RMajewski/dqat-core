@@ -1,3 +1,10 @@
+# [1.0.0-alpha.8](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2026-05-11)
+
+
+### Features
+
+* **normalizeArtifactFileName:** Artefakt-Dateinamen normalisieren ([44dda85](https://github.com/RMajewski/dqat-core/commit/44dda85028959cd94a5df1cd1e84b848f3a57d14))
+
 # [1.0.0-alpha.7](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2026-05-06)
 
 

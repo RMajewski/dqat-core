@@ -1,3 +1,10 @@
+# [1.0.0-alpha.9](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2026-05-11)
+
+
+### Bug Fixes
+
+* **utils:** normalizeArtifactFileName im utils-Entry exportieren ([b9db550](https://github.com/RMajewski/dqat-core/commit/b9db550bbd5adec1d5fd50ded5f8a5562c10f7cf))
+
 # [1.0.0-alpha.8](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2026-05-11)
 
 

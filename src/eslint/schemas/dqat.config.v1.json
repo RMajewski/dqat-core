@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dqat.dev/schemas/dqat.config.v1.json",
+  "title": "DQAT configuration",
+  "description": "Validiert die allgemeine DQAT-Konfiguration. Erweiterungspakete dürfen eigene Root-Bereiche ergänzen.",
+  "type": "object",
+  "properties": {
+    "envProviderOptions": {
+      "type": "object",
+      "description": "Konfiguration für das Einlesen und Transformieren von Umgebungsvariablen.",
+      "properties": {
+        "stripPrefix": {
+          "type": "string",
+          "description": "Optionales Präfix, das vor dem Lookup aus ENV-Variablen entfernt wird."
+        },
+        "doubleUnderscoreIsSeparator": {
+          "type": "boolean",
+          "description": "Steuert, ob doppelte Unterstriche (\"__\") als Trenner interpretiert werden."
+        },
+        "toLowerCase": {
+          "type": "boolean",
+          "description": "Steuert, ob Variablennamen in Kleinschreibung konvertiert werden, bevor sie intern weiterverarbeitet werden."
+        },
+        "parse": {
+          "description": "Legt fest, ob und wie Werte aus Umgebungsvariablen in passendere Datentypen umgewandelt werden.",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "numbers": {
+                  "type": "boolean",
+                  "description": "Legt fest, ob numerische Zeichenketten als Zahlen geparst werden."
+                },
+                "booleans": {
+                  "type": "boolean",
+                  "description": "Legt fest, ob Boolean-Zeichenketten als Boolean-Werte geparst werden."
+                },
+                "json": {
+                  "type": "boolean",
+                  "description": "Legt fest, ob JSON-Zeichenketten als JSON-Werte geparst werden."
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "dropUndefined": {
+          "type": "boolean",
+          "description": "Legt fest, ob Werte mit undefined beim Erzeugen der Konfiguration entfernt werden."
+        }
+      },
+      "additionalProperties": false
+    },
+    "framework": {
+      "type": "object",
+      "description": "Framework-weite DQAT-Einstellungen.",
+      "properties": {
+        "settings": {
+          "type": "object",
+          "description": "Freier Bereich für framework-weite Einstellungen. Die konkrete Struktur ist aktuell Record<string, unknown>.",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

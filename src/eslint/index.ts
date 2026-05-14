@@ -1,29 +1,8 @@
-import type { Linter } from 'eslint';
-import jsonSchemaValidator from 'eslint-plugin-json-schema-validator';
-import holodeckSceneSchema from './schemas/holodeck.scene.v1.json' with { type: 'json' };
+import { createDqatConfigValidationConfig } from './config/createDqatConfigValidationConfig.ts';
+import { holodeckSceneConfig } from './config/holodeckSceneConfig.ts';
 
-/**
- * Vorgefertigte ESLint-Konfiguration für Holodeck-Szenen.
- */
-export const holodeckSceneConfig: Linter.Config[] = [
-  ...jsonSchemaValidator.configs.base,
-  {
-    files: ['**/*.scene.json'],
-    rules: {
-      'json-schema-validator/no-invalid': [
-        'error',
-        {
-          schemas: [
-            {
-              fileMatch: ['**/*.scene.json'],
-              schema: holodeckSceneSchema,
-            },
-          ],
-        },
-      ],
-    },
-  },
-];
+export { createJsonSchemaValidationConfig } from './config/createJsonSchemaValidationConfig.ts';
+export { createDqatConfigValidationConfig, holodeckSceneConfig };
 
 /**
  * Stellt die ESLint-Erweiterungen von DQAT bereit.
@@ -31,5 +10,7 @@ export const holodeckSceneConfig: Linter.Config[] = [
 export default {
   configs: {
     holodeck: holodeckSceneConfig,
+    dqatConfigValidationConfig: createDqatConfigValidationConfig(),
   },
+  createDqatConfigValidationConfig,
 };

@@ -2,7 +2,10 @@
 import js from '@eslint/js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { holodeckSceneConfig } from './src/eslint/index.ts';
+import {
+  createDqatConfigValidationConfig,
+  holodeckSceneConfig,
+} from './src/eslint/index.ts';
 
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptEslintParser from '@typescript-eslint/parser';
@@ -248,4 +251,5 @@ export default [
 
   // JSON-Schema-Validation
   ...holodeckSceneConfig,
+  ...createDqatConfigValidationConfig(),
 ];

@@ -1,3 +1,10 @@
+# [1.0.0-alpha.10](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2026-05-14)
+
+
+### Features
+
+* **eslint:** validiere dqat.config.json über JSON-Schema ([9862bd7](https://github.com/RMajewski/dqat-core/commit/9862bd7952ef81883ad22271c3dc284c4d4fdd09))
+
 # [1.0.0-alpha.9](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2026-05-11)
 
 

@@ -1,3 +1,10 @@
+# [1.0.0-alpha.11](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2026-05-14)
+
+
+### Bug Fixes
+
+* **eslint:** Schema-Datei für dqat.config.json wird ins build hinzugefügt ([73e054a](https://github.com/RMajewski/dqat-core/commit/73e054a687b361653b7cd6d9b303711b19b4fd8a))
+
 # [1.0.0-alpha.10](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2026-05-14)
 
 

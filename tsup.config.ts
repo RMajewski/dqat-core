@@ -28,5 +28,10 @@ export default defineConfig({
       'src/eslint/schemas/holodeck.scene.v1.json',
       'dist/eslint/schemas/holodeck.scene.v1.json',
     );
+
+    cpSync(
+      'src/eslint/schemas/dqat.config.v1.json',
+      'dist/eslint/schemas/dqat.config.v1.json',
+    );
   },
 });

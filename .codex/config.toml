@@ -1,0 +1,19 @@
+[permissions.project-edit.filesystem.":workspace_roots"]
+"." = "write"
+
+".env*" = "deny"
+"**/.env*" = "deny"
+
+"node_modules" = "deny"
+"node_modules/**" = "deny"
+
+"dist" = "deny"
+"dist/**" = "deny"
+
+"coverage" = "deny"
+"coverage/**" = "deny"
+
+".pnpm-store" = "deny"
+".pnpm-store/**" = "deny"
+
+"**/reports/**" = "deny"

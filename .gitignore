@@ -127,6 +127,7 @@ dist
 
 # AI files
 .codex
+!.codex/
 
 # yarn v3
 .pnp.*

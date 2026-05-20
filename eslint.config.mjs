@@ -143,6 +143,8 @@ export default [
       '**/.output/**',
       '**/coverage/**',
       'data/**',
+      '.codex/',
+      '.claude/',
     ],
   },
 

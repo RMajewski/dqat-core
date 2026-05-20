@@ -191,7 +191,7 @@ export class DqatWorld extends World implements ICucumberWorld {
    */
   public hasDirective(key: TStarfleetDirectiveKey): boolean {
     if (!this.directives) {
-      throw new Error('Keine StarfleetDirectives geladen');
+      return false;
     }
     return this.directives.hasDirective(key);
   }

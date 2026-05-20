@@ -1,3 +1,10 @@
+# [1.0.0-alpha.13](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.12...v1.0.0-alpha.13) (2026-05-20)
+
+
+### Bug Fixes
+
+* **dqat-world:** hasDirective() gibt false zurück, wenn keine Directives geladen sind ([87e765e](https://github.com/RMajewski/dqat-core/commit/87e765e278a362df9050ccddf0d59330a23c24c5))
+
 # [1.0.0-alpha.12](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2026-05-20)
 
 

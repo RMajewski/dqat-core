@@ -66,8 +66,7 @@ export const StarfleetDirectiveKey = {
  * um Parameter wie `key: TStarfleetDirectiveKey`
  * typsicher zu beschränken.
  */
-export type TStarfleetDirectiveKey =
-  (typeof StarfleetDirectiveKey)[keyof typeof StarfleetDirectiveKey];
+export type TStarfleetDirectiveKey = keyof IStarfleetDirectiveSchema;
 
 /**
  * @interface IStarfleetDirectiveSchema

@@ -1,3 +1,10 @@
+# [1.0.0-alpha.12](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2026-05-20)
+
+
+### Features
+
+* **starfleet-directives:** IStarfleetDirectiveSchema für externe Pakete exportierbar machen ([f5d59d4](https://github.com/RMajewski/dqat-core/commit/f5d59d4c882224675777f8d4a49e6f542f7cb7eb))
+
 # [1.0.0-alpha.11](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2026-05-14)
 
 

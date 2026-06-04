@@ -1,3 +1,10 @@
+# [1.0.0-alpha.14](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.13...v1.0.0-alpha.14) (2026-06-04)
+
+
+### Features
+
+* **dqat-core:** commonStringList-Cucumber-Parameter und parseCommaSeparatedList hinzufügen ([a0c9398](https://github.com/RMajewski/dqat-core/commit/a0c9398f86286db2cd5c0484294e2262f84c9f0a))
+
 # [1.0.0-alpha.13](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.12...v1.0.0-alpha.13) (2026-05-20)
 
 

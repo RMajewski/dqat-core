@@ -31,3 +31,19 @@ export function normalizeArtifactFileName(
     .replaceAll(/-$/g, '')
     .substring(0, maxLength);
 }
+
+/**
+ * Zerlegt eine kommaseparierte Zeichenkette in einzelne bereinigte Werte.
+ *
+ * Leerzeichen am Anfang und Ende einzelner Werte werden entfernt.
+ * Leere Einträge werden ignoriert. Die Reihenfolge der Werte bleibt erhalten.
+ *
+ * @param value - Kommaseparierte Zeichenkette
+ * @returns Bereinigte Liste einzelner Werte
+ */
+export function parseCommaSeparatedList(value: string): string[] {
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+}

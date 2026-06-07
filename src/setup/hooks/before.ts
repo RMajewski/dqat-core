@@ -19,6 +19,8 @@ export function beforeScenarioGeneral(): void {
       this.recordMissionEvent,
     );
 
+    this.loadStarfleetDirectives([]);
+
     // Minimalistische Korrelation (kann später durch echte IDs ersetzt werden)
     const runId = (this.get('run.id') as string) ?? `run-${Date.now()}`;
     const scenarioId = `scenario-${Date.now()}`;

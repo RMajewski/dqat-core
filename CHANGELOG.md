@@ -1,3 +1,10 @@
+# [1.0.0-alpha.15](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.14...v1.0.0-alpha.15) (2026-06-07)
+
+
+### Bug Fixes
+
+* **dqat-core:** Directives im Bootstrap-Prozess initialisieren ([b8bf821](https://github.com/RMajewski/dqat-core/commit/b8bf821aa3e47a8f1657252cc7ed7eb375d18c52))
+
 # [1.0.0-alpha.14](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.13...v1.0.0-alpha.14) (2026-06-04)
 
 

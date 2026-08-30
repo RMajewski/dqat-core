@@ -100,7 +100,8 @@
     "LICENSE",
     "LICENSE_DE",
     "NOTICE.md",
-    "NOTICE_DE.md"
+    "NOTICE_DE.md",
+    "src"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

@@ -1,3 +1,10 @@
+# [1.0.0-alpha.16](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.15...v1.0.0-alpha.16) (2026-08-30)
+
+
+### Bug Fixes
+
+* Source-Dateien für Cucumber-Autocomplete veröffentlichen ([324293b](https://github.com/RMajewski/dqat-core/commit/324293bc96d424f22cd1eb40a1aec0fc08f84cf0))
+
 # [1.0.0-alpha.15](https://github.com/RMajewski/dqat-core/compare/v1.0.0-alpha.14...v1.0.0-alpha.15) (2026-06-07)
 
 
